@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "ProductivityTools.AzureDevOps.TimeTracking": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+      "commandLineArgs": "-noexit -command \"import-module D:\\GitHub\\ProductivityTools.AzureDevOps.TimeTracking\\ProductivityTools.AzureDevOps.TimeTracking\\bin\\Debug\\netstandard2.0\\publish\\ProductivityTools.AzureDevOps.TimeTracking.dll"
+    }
+  }
+}

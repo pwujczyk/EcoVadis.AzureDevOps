@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductivityTools.AzureDevOps.TimeTracking", "ProductivityTools.AzureDevOps.TimeTracking\ProductivityTools.AzureDevOps.TimeTracking.csproj", "{95E05B86-5F9F-488A-AFB7-B92C89B6E673}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductivityTools.AzureDevOps.TimeTracking.App", "ProductivityTools.AzureDevOps.TimeTracking.App\ProductivityTools.AzureDevOps.TimeTracking.App.csproj", "{B4233DDA-27E8-4EE4-8676-0678C8BA41D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductivityTools.AzureDevOps.TimeTracking.Facade", "ProductivityTools.AzureDevOps.TimeTracking.Facade\ProductivityTools.AzureDevOps.TimeTracking.Facade.csproj", "{C252D3ED-0C95-4FA3-83BC-C83E0F4D0587}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{95E05B86-5F9F-488A-AFB7-B92C89B6E673}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95E05B86-5F9F-488A-AFB7-B92C89B6E673}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95E05B86-5F9F-488A-AFB7-B92C89B6E673}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4233DDA-27E8-4EE4-8676-0678C8BA41D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4233DDA-27E8-4EE4-8676-0678C8BA41D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4233DDA-27E8-4EE4-8676-0678C8BA41D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4233DDA-27E8-4EE4-8676-0678C8BA41D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C252D3ED-0C95-4FA3-83BC-C83E0F4D0587}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C252D3ED-0C95-4FA3-83BC-C83E0F4D0587}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C252D3ED-0C95-4FA3-83BC-C83E0F4D0587}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C252D3ED-0C95-4FA3-83BC-C83E0F4D0587}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
