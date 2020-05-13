@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Services.WebApi.Patch;
 using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ProductivityTools.AzureDevOps.TimeTracking.Facade
 {
@@ -34,5 +35,70 @@ namespace ProductivityTools.AzureDevOps.TimeTracking.Facade
 
             return WitClient.CreateWorkItemAsync(patchDocument, projectName, workItemTypeName).Result;
         }
+
+
+        public WorkItem AddParentLink(int id, int parentid)
+        {
+            WorkItem wi = WitClient.GetWorkItemAsync(id, expand: WorkItemExpand.Relations).Result;
+            bool parentExists = false;
+
+            // check existing parent link
+            if (wi.Relations != null)
+                if (wi.Relations.Where(x => x.Rel == RelConstants.ParentRefStr).FirstOrDefault() != null)
+                    parentExists = true;
+
+            if (!parentExists)
+            {
+                WorkItem parentWi = WitClient.GetWorkItemAsync(parentid).Result; // get parent to retrieve its url
+
+                Dictionary<string, object> fields = new Dictionary<string, object>();
+
+                fields.Add(RelConstants.LinkKeyForDict + RelConstants.ParentRefStr + parentWi.Id, // to use as unique key
+                CreateNewLinkObject(RelConstants.ParentRefStr, parentWi.Url, "Parent " + parentWi.Id));
+
+                return SubmitWorkItem(fields, id);
+            }
+
+            Console.WriteLine("Work Item " + id + " contains a parent link");
+
+            return null;
+        }
+
+        object CreateNewLinkObject(string relName, string RelUrl, string Comment = null, bool IsLocked = false)
+        {
+            return new
+            {
+                rel = relName,
+                url = RelUrl,
+                attributes = new
+                {
+                    comment = Comment,
+                    isLocked = IsLocked // you must be an administrator to lock a link
+                }
+            };
+        }
+
+        public WorkItem GetWorkItemWithRelations(int Id)
+        {
+            return WitClient.GetWorkItemAsync(Id, expand: WorkItemExpand.Relations).Result;
+        }
+
+        static WorkItem SubmitWorkItem(Dictionary<string, object> Fields, int WIId = 0, string TeamProjectName = "", string WorkItemTypeName = "")
+        {
+            JsonPatchDocument patchDocument = new JsonPatchDocument();
+
+            foreach (var key in Fields.Keys)
+                patchDocument.Add(new JsonPatchOperation()
+                {
+                    Operation = Operation.Add,
+                    Path = (key.StartsWith(RelConstants.LinkKeyForDict)) ? "/relations/-" : "/fields/" + key,
+                    Value = Fields[key]
+                });
+
+            if (WIId == 0) return WitClient.CreateWorkItemAsync(patchDocument, TeamProjectName, WorkItemTypeName).Result; // create new work item
+
+            return WitClient.UpdateWorkItemAsync(patchDocument, WIId).Result; // return updated work item
+        }
+
     }
 }
