@@ -14,7 +14,6 @@ namespace ProductivityTools.AzureDevOps.TimeTracking.Facade
     public class TFS
     {
         static WorkItemTrackingHttpClient WitClient;
-        GraphHttpClient graphClient;
 
         public TFS(string tfsAddress, string personalAccessToken)
         {
