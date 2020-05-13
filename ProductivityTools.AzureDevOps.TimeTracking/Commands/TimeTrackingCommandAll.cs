@@ -5,9 +5,9 @@ using System.Text;
 
 namespace ProductivityTools.AzureDevOps.TimeTracking.Commands
 {
-    public class TimeTrackingCommandAll : PSCmdlet.PSCommandPT<TimeTrackingCmdlet>
+    public class ReportStealingCommand : PSCmdlet.PSCommandPT<ReportStealingCmdlet>
     {
-        public TimeTrackingCommandAll(TimeTrackingCmdlet cmdletType) : base(cmdletType)
+        public ReportStealingCommand(ReportStealingCmdlet cmdletType) : base(cmdletType)
         {
         }
 
