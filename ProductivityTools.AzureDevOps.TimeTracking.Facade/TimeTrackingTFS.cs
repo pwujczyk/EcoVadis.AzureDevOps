@@ -100,5 +100,20 @@ namespace ProductivityTools.AzureDevOps.TimeTracking.Facade
             return WitClient.UpdateWorkItemAsync(patchDocument, WIId).Result; // return updated work item
         }
 
+        public WorkItem UpdateWorkItem(int id, Dictionary<string, object> fields)
+        {
+            JsonPatchDocument patchDocument = new JsonPatchDocument();
+
+            foreach (var key in fields.Keys)
+                patchDocument.Add(new JsonPatchOperation()
+                {
+                    Operation = Operation.Add,
+                    Path = "/fields/" + key,
+                    Value = fields[key]
+                });
+
+            return WitClient.UpdateWorkItemAsync(patchDocument, id).Result;
+        }
+
     }
 }

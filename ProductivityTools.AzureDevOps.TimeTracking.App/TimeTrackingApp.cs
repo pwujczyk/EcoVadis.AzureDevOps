@@ -18,7 +18,7 @@ namespace ProductivityTools.AzureDevOps.TimeTracking.App
             this.PAT = pat;
         }
 
-        public void CreateStealing(string projectName, string title, string activity)
+        public void CreateStealing(string projectName, string title, string activity, bool closed)
         {
 
             TFS tfs = new TFS(this.TfsUrl, this.PAT);
@@ -28,16 +28,27 @@ namespace ProductivityTools.AzureDevOps.TimeTracking.App
             fields.Add("Title", title);
             fields.Add("Activity", activity);
             fields.Add("Priority", 1);
-            fields.Add("State","Closed");
+
             fields.Add("System.AssignedTo", @"Pawel Wujczyk <PRD\pwujczyk>");
             fields.Add("System.AreaPath", stealingsUS.Fields["System.AreaPath"]);
             
             fields.Add("System.IterationPath", stealingsUS.Fields["System.IterationPath"]);
-
-
             var item= tfs.CreateWorkItem(projectName, "Eco Task", fields);
+
+            
             
             tfs.AddParentLink(item.Id.Value, StealingId);
+
+            if (closed)
+            {
+                Dictionary<string, object> updatefields = new Dictionary<string, object>();
+                updatefields.Add("State", "Active");
+                tfs.UpdateWorkItem(item.Id.Value, updatefields);
+
+                updatefields.Clear();
+                updatefields.Add("State", "Closed");
+                tfs.UpdateWorkItem(item.Id.Value, updatefields);
+            }
         }
     }
 }

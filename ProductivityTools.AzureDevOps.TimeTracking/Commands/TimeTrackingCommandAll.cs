@@ -18,9 +18,10 @@ namespace ProductivityTools.AzureDevOps.TimeTracking.Commands
             var tfsAddress=Environment.GetEnvironmentVariable("TFSAddress");
             var pat = Environment.GetEnvironmentVariable("PAT");
             TimeTrackingApp app = new TimeTrackingApp(tfsAddress, pat);
-            app.CreateStealing("EcoVadisApp", "ToDelete123", "FE Development");
+            app.CreateStealing("EcoVadisApp", "ToDelete123", "FE Development",true);
             Console.WriteLine("Hello from TimeTrackingCommandAll!X1");
 
+            
         }
     }
 }
