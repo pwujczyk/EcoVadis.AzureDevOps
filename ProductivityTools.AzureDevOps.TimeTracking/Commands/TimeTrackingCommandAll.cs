@@ -7,6 +7,7 @@ namespace ProductivityTools.AzureDevOps.TimeTracking.Commands
 {
     public class ReportStealingCommand : PSCmdlet.PSCommandPT<ReportStealingCmdlet>
     {
+        private const string ProjectName = "EcoVadisApp";
         public ReportStealingCommand(ReportStealingCmdlet cmdletType) : base(cmdletType)
         {
         }
@@ -15,13 +16,12 @@ namespace ProductivityTools.AzureDevOps.TimeTracking.Commands
 
         protected override void Invoke()
         {
-            var tfsAddress=Environment.GetEnvironmentVariable("TFSAddress");
-            var pat = Environment.GetEnvironmentVariable("PAT");
-            TimeTrackingApp app = new TimeTrackingApp(tfsAddress, pat);
-            app.CreateStealing("EcoVadisApp", "ToDelete123", "FE Development",true);
-            Console.WriteLine("Hello from TimeTrackingCommandAll!X1");
+            var tfsAddress=Environment.GetEnvironmentVariable("TTTFSAddress");
+            var pat = Environment.GetEnvironmentVariable("TTPAT");
+            var username = Environment.GetEnvironmentVariable("TTuserName");
 
-            
+            TimeTrackingApp app = new TimeTrackingApp(tfsAddress, pat);
+            app.CreateStealing(ProjectName, username, this.Cmdlet.Name, "FE Development",this.Cmdlet.LeaveActive);
         }
     }
 }

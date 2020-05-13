@@ -17,7 +17,7 @@ namespace ProductivityTools.AzureDevOps.TimeTracking
         public float Time { get; set; }
 
         [Parameter(HelpMessage = "By default stealing is closed if you want to leave it active set this flag")]
-        public SwitchParameter Unclosed { get; set; }
+        public SwitchParameter LeaveActive { get; set; }
 
         public ReportStealingCmdlet()
         {

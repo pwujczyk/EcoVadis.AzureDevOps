@@ -18,9 +18,8 @@ namespace ProductivityTools.AzureDevOps.TimeTracking.App
             this.PAT = pat;
         }
 
-        public void CreateStealing(string projectName, string title, string activity, bool closed)
+        public void CreateStealing(string projectName,string username, string title, string activity, bool leaveActive)
         {
-
             TFS tfs = new TFS(this.TfsUrl, this.PAT);
             var stealingsUS = tfs.GetWorkItemWithRelations(StealingId);
 
@@ -29,25 +28,23 @@ namespace ProductivityTools.AzureDevOps.TimeTracking.App
             fields.Add("Activity", activity);
             fields.Add("Priority", 1);
 
-            fields.Add("System.AssignedTo", @"Pawel Wujczyk <PRD\pwujczyk>");
+            fields.Add("System.AssignedTo", username);
             fields.Add("System.AreaPath", stealingsUS.Fields["System.AreaPath"]);
-            
-            fields.Add("System.IterationPath", stealingsUS.Fields["System.IterationPath"]);
-            var item= tfs.CreateWorkItem(projectName, "Eco Task", fields);
 
-            
-            
+            fields.Add("System.IterationPath", stealingsUS.Fields["System.IterationPath"]);
+            var item = tfs.CreateWorkItem(projectName, "Eco Task", fields);
+
             tfs.AddParentLink(item.Id.Value, StealingId);
 
-            if (closed)
-            {
-                Dictionary<string, object> updatefields = new Dictionary<string, object>();
-                updatefields.Add("State", "Active");
-                tfs.UpdateWorkItem(item.Id.Value, updatefields);
+            fields.Clear();
+            fields.Add("State", "Active");
+            tfs.UpdateWorkItem(item.Id.Value, fields);
 
-                updatefields.Clear();
-                updatefields.Add("State", "Closed");
-                tfs.UpdateWorkItem(item.Id.Value, updatefields);
+            if (leaveActive == false)
+            {
+                fields.Clear();
+                fields.Add("State", "Closed");
+                tfs.UpdateWorkItem(item.Id.Value, fields);
             }
         }
     }
