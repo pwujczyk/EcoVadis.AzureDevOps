@@ -13,11 +13,8 @@ namespace ProductivityTools.AzureDevOps.TimeTracking.Commands
         private readonly string Activity;
 
 
-
         public ReportStealingCommand(NewStealing cmdletType, bool bestealing) : base(cmdletType)
         {
-
-
             if (bestealing)
             {
                 this.Activity = "BE Development";
@@ -32,10 +29,7 @@ namespace ProductivityTools.AzureDevOps.TimeTracking.Commands
 
         protected override void Invoke()
         {
-
-
-            TimeTrackingApp app = new TimeTrackingApp(TfsAddress, PAT);
-            app.CreateStealing(ProjectName, UserName, this.Cmdlet.Name, this.Activity, this.Cmdlet.LeaveActive);
+            base.App.CreateStealing(ProjectName, UserName, this.Cmdlet.Name, this.Activity, this.Cmdlet.LeaveActive);
         }
     }
 }

@@ -8,9 +8,9 @@ namespace ProductivityTools.AzureDevOps.TimeTracking
 {
     [Cmdlet(VerbsCommon.New, "BEStealing")]
     [Description("Adds stealing in the stealings")]
-    public class NewBEStealingCmdlet : NewStealing
+    public class NewBEStealingcmdlet : NewStealing
     {
-        public NewBEStealingCmdlet()
+        public NewBEStealingcmdlet()
         {
             base.AddCommand(new ReportStealingCommand(this, true));
         }

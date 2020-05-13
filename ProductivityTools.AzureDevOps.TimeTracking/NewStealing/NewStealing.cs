@@ -5,12 +5,12 @@ using System.Text;
 
 namespace ProductivityTools.AzureDevOps.TimeTracking
 {
-    public abstract class NewStealing: PSCmdlet.PSCmdletPT
+    public abstract class NewStealing : PSCmdlet.PSCmdletPT
     {
-        [Parameter(HelpMessage = "Name of the stealing", Mandatory = true)]
+        [Parameter(Position = 0, HelpMessage = "Name of the stealing", Mandatory = true)]
         public string Name { get; set; }
 
-        [Parameter(HelpMessage = "Amout of time to be reported", Mandatory = true)]
+        [Parameter(Position = 1, HelpMessage = "Amout of time to be reported", Mandatory = true)]
         public float Time { get; set; }
 
         [Parameter(HelpMessage = "By default stealing is closed if you want to leave it active set this flag")]
