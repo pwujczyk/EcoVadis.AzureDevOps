@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProductivityTools.AzureDevOps.TimeTracking.App;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,7 +15,12 @@ namespace ProductivityTools.AzureDevOps.TimeTracking.Commands
 
         protected override void Invoke()
         {
-            Console.WriteLine("Hello from TimeTrackingCommandAll");
+            var tfsAddress=Environment.GetEnvironmentVariable("TFSAddress");
+            var pat = Environment.GetEnvironmentVariable("PAT");
+            TimeTrackingApp app = new TimeTrackingApp(tfsAddress, pat);
+            app.CreateEcoTask("EcoVadisApp", "ToDelete123", "Activity");
+            Console.WriteLine("Hello from TimeTrackingCommandAll!X1");
+
         }
     }
 }
