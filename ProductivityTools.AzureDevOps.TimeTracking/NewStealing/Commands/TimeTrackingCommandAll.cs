@@ -1,18 +1,23 @@
 ﻿using Microsoft.TeamFoundation.Work.WebApi;
 using ProductivityTools.AzureDevOps.TimeTracking.App;
+using ProductivityTools.AzureDevOps.TimeTracking.Base;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ProductivityTools.AzureDevOps.TimeTracking.Commands
 {
-    public class ReportStealingCommand : PSCmdlet.PSCommandPT<NewStealing>
+    public class ReportStealingCommand : CommandBase<NewStealing>
     {
         private const string ProjectName = "EcoVadisApp";
         private readonly string Activity;
 
+
+
         public ReportStealingCommand(NewStealing cmdletType, bool bestealing) : base(cmdletType)
         {
+
+
             if (bestealing)
             {
                 this.Activity = "BE Development";
@@ -27,12 +32,10 @@ namespace ProductivityTools.AzureDevOps.TimeTracking.Commands
 
         protected override void Invoke()
         {
-            var tfsAddress = Environment.GetEnvironmentVariable("TTTFSAddress");
-            var pat = Environment.GetEnvironmentVariable("TTPAT");
-            var username = Environment.GetEnvironmentVariable("TTuserName");
 
-            TimeTrackingApp app = new TimeTrackingApp(tfsAddress, pat);
-            app.CreateStealing(ProjectName, username, this.Cmdlet.Name, this.Activity, this.Cmdlet.LeaveActive);
+
+            TimeTrackingApp app = new TimeTrackingApp(TfsAddress, PAT);
+            app.CreateStealing(ProjectName, UserName, this.Cmdlet.Name, this.Activity, this.Cmdlet.LeaveActive);
         }
     }
 }

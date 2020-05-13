@@ -27,6 +27,7 @@ namespace ProductivityTools.AzureDevOps.TimeTracking.App
             fields.Add("Title", title);
             fields.Add("Activity", activity);
             fields.Add("Priority", 1);
+            
 
             fields.Add("System.AssignedTo", username);
             fields.Add("System.AreaPath", stealingsUS.Fields["System.AreaPath"]);
