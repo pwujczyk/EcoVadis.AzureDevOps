@@ -29,7 +29,7 @@ namespace ProductivityTools.AzureDevOps.TimeTracking.Commands
 
         protected override void Invoke()
         {
-            base.App.CreateStealing(ProjectName, UserName, this.Cmdlet.Name, this.Activity, this.Cmdlet.LeaveActive);
+            base.App.CreateStealing(ProjectName, UserName, this.Cmdlet.Name, this.Cmdlet.Time, this.Activity, this.Cmdlet.LeaveActive);
         }
     }
 }
