@@ -1,9 +1,9 @@
-﻿using ProductivityTools.AzureDevOps.TimeTracking.Facade;
+﻿using EcoVadis.TimeTracking.Facade;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
 
-namespace ProductivityTools.AzureDevOps.TimeTracking.App
+namespace EcoVadis.TimeTracking.App
 {
     public class TimeTrackingApp
     {

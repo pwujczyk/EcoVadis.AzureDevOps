@@ -1,12 +1,12 @@
-﻿using ProductivityTools.AzureDevOps.TimeTracking.App;
-using ProductivityTools.PSCmdlet;
+﻿using EcoVadis.TimeTracking.App;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ProductivityTools.PSCmdlet;
 
-namespace ProductivityTools.AzureDevOps.TimeTracking.Base
+namespace EcoVadis.TimeTracking.Base
 {
-    public abstract class CommandBase<CmdletType> : PSCmdlet.PSCommandPT<CmdletType> where CmdletType : PSCmdletPT
+    public abstract class CommandBase<CmdletType> : PSCommandPT<CmdletType> where CmdletType : PSCmdletPT
     {
         protected string TfsAddress;
         protected string PAT;

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Management.Automation;
 using System.Text;
+using ProductivityTools.PSCmdlet;
 
-namespace ProductivityTools.AzureDevOps.TimeTracking
+namespace EcoVadis.TimeTracking
 {
-    public abstract class NewStealing : PSCmdlet.PSCmdletPT
+    public abstract class NewStealing : PSCmdletPT
     {
         [Parameter(Position = 0, HelpMessage = "Name of the stealing", Mandatory = true)]
         public string Name { get; set; }

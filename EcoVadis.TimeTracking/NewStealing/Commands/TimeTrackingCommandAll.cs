@@ -1,11 +1,11 @@
 ﻿using Microsoft.TeamFoundation.Work.WebApi;
-using ProductivityTools.AzureDevOps.TimeTracking.App;
-using ProductivityTools.AzureDevOps.TimeTracking.Base;
+using EcoVadis.TimeTracking.App;
+using EcoVadis.TimeTracking.Base;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProductivityTools.AzureDevOps.TimeTracking.Commands
+namespace EcoVadis.TimeTracking.Commands
 {
     public class ReportStealingCommand : CommandBase<NewStealing>
     {

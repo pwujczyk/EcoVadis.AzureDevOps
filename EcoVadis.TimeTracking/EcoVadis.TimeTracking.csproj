@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProductivityTools.AzureDevOps.TimeTracking.App\ProductivityTools.AzureDevOps.TimeTracking.App.csproj" />
+    <ProjectReference Include="..\EcoVadis.TimeTracking.App\EcoVadis.TimeTracking.App.csproj" />
   </ItemGroup>
 
 </Project>

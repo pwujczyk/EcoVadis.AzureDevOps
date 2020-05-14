@@ -1,16 +1,17 @@
-﻿using ProductivityTools.AzureDevOps.TimeTracking.GetItem.Commands;
+﻿using EcoVadis.TimeTracking.GetItem.Commands;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Management.Automation;
 using System.Text;
+using ProductivityTools.PSCmdlet;
 
-namespace ProductivityTools.AzureDevOps.TimeTracking.GetItem
+namespace EcoVadis.TimeTracking.GetItem
 {
 
     [Cmdlet(VerbsCommon.Get, "TFSItem")]
     [Description("Get item details")]
-    public class GetItemCmdlet : PSCmdlet.PSCmdletPT
+    public class GetItemCmdlet : PSCmdletPT
     {
         [Parameter(Mandatory =true,Position =0, HelpMessage ="Work item id")]
         public int Id { get; set; }

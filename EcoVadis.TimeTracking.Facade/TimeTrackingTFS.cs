@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ProductivityTools.AzureDevOps.TimeTracking.Facade
+namespace EcoVadis.TimeTracking.Facade
 {
     public class TFS
     {
