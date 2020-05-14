@@ -15,11 +15,23 @@ namespace EcoVadis.AzureDevOps.Base
 
         public CommandBase(CmdletType cmdlet) : base(cmdlet)
         {
-            TfsAddress = Environment.GetEnvironmentVariable("TTTFSAddress");
-            PAT = Environment.GetEnvironmentVariable("TTPAT");
-            UserName = Environment.GetEnvironmentVariable("TTuserName");
+            Func<string, string> GetVariable = (name) =>
+               {
+                   var @var = Environment.GetEnvironmentVariable(name);
+                   if (string.IsNullOrEmpty(var))
+                   {
+                       throw new Exception($"You need to setup environment variable with the name {name}");
+                   }
+                   return var;
+               };
+
+            TfsAddress = GetVariable("TTTFSAddress");
+            PAT = GetVariable("TTPAT");
+            UserName = GetVariable("TTuserName");
 
             App = new TimeTrackingApp(TfsAddress, PAT);
         }
+
+
     }
 }
