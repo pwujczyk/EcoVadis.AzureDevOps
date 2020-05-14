@@ -23,7 +23,7 @@ Use it.
 New-FEStealing "StealingFE" 13
 New-BEStealing "StealingBE" 14
  ```
-![Stealing](Images\StealingInTFS.png)
+![Stealing](Images/StealingInTFS.png)
 
 
 
