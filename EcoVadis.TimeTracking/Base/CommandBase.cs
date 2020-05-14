@@ -1,10 +1,10 @@
-﻿using EcoVadis.TimeTracking.App;
+﻿using EcoVadis.AzureDevOps.App;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using ProductivityTools.PSCmdlet;
 
-namespace EcoVadis.TimeTracking.Base
+namespace EcoVadis.AzureDevOps.Base
 {
     public abstract class CommandBase<CmdletType> : PSCommandPT<CmdletType> where CmdletType : PSCmdletPT
     {

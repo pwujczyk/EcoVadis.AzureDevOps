@@ -4,7 +4,7 @@ using System.Management.Automation;
 using System.Text;
 using ProductivityTools.PSCmdlet;
 
-namespace EcoVadis.TimeTracking
+namespace EcoVadis.AzureDevOps
 {
     public abstract class NewStealing : PSCmdletPT
     {

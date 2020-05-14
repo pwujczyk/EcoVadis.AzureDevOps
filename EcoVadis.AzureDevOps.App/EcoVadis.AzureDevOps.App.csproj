@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EcoVadis.TimeTracking.Facade\EcoVadis.TimeTracking.Facade.csproj" />
+    <ProjectReference Include="..\EcoVadis.AzureDevOps.Facade\EcoVadis.AzureDevOps.Facade.csproj" />
   </ItemGroup>
 
 </Project>

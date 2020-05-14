@@ -1,4 +1,4 @@
-﻿using EcoVadis.TimeTracking.GetItem.Commands;
+﻿using EcoVadis.AzureDevOps.GetItem.Commands;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,7 +6,7 @@ using System.Management.Automation;
 using System.Text;
 using ProductivityTools.PSCmdlet;
 
-namespace EcoVadis.TimeTracking.GetItem
+namespace EcoVadis.AzureDevOps.GetItem
 {
 
     [Cmdlet(VerbsCommon.Get, "TFSItem")]

@@ -1,9 +1,9 @@
-﻿using EcoVadis.TimeTracking.Base;
+﻿using EcoVadis.AzureDevOps.Base;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace EcoVadis.TimeTracking.GetItem.Commands
+namespace EcoVadis.AzureDevOps.GetItem.Commands
 {
     public class GetItemById : CommandBase<GetItemCmdlet>
     {

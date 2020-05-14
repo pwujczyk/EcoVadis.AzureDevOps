@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EcoVadis.TimeTracking.Facade
+namespace EcoVadis.AzureDevOps.Facade
 {
     class RelConstants
     {

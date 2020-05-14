@@ -1,10 +1,10 @@
-﻿using EcoVadis.TimeTracking.Commands;
+﻿using EcoVadis.AzureDevOps.Commands;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Management.Automation;
 
-namespace EcoVadis.TimeTracking
+namespace EcoVadis.AzureDevOps
 {
     [Cmdlet(VerbsCommon.New, "BEStealing")]
     [Description("Adds stealing in the stealings")]
