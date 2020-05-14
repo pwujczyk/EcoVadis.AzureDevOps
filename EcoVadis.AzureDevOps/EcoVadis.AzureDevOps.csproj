@@ -21,4 +21,10 @@
     <ProjectReference Include="..\EcoVadis.AzureDevOps.App\EcoVadis.AzureDevOps.App.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="EcoVadis.AzureDevOps.psd1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
