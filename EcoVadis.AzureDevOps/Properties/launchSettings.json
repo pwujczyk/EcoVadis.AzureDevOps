@@ -2,8 +2,8 @@
   "profiles": {
     "EcoVadis.AzureDevOps": {
       "commandName": "Executable",
-      "executablePath": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
-      "commandLineArgs": "-noexit -command \"import-module d:\\GitHub\\ProductivityTools.AzureDevOps.TimeTracking\\EcoVadis.AzureDevOps\\bin\\Debug\\netstandard2.0\\\\EcoVadis.AzureDevOps.dll"
+      "executablePath": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+      "commandLineArgs": "-noexit -command \"import-module D:\\GitHub\\EcoVadis.AzureDevOps\\EcoVadis.AzureDevOps\\bin\\Debug\\netstandard2.0\\EcoVadis.AzureDevOps.dll"
     }
   }
 }

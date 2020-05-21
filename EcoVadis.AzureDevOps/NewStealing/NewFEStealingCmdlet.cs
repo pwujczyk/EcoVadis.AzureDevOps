@@ -13,6 +13,11 @@ namespace EcoVadis.AzureDevOps
     {
         public NewFEStealingcmdlet()
         {
+          
+        }
+
+        protected override void BeginProcessing()
+        {
             base.AddCommand(new ReportStealingCommand(this, false));
         }
 
