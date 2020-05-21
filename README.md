@@ -1,8 +1,6 @@
 # EcoVadis.AzureDevOps
 
-If you don't have PowerShell core install it. (https://github.com/PowerShell/Powershell) (I don't know why it is not working on PowerShell 6.0 - maybe somebody help me error is  ``Could not load file or assembly 'System.Net.Http.Formatting, Version=5.2.4.0``)
-
-Next install the module from [PowerShell Gallery](https://www.powershellgallery.com/packages/EcoVadis.AzureDevOps/)
+Install the module from [PowerShell Gallery](https://www.powershellgallery.com/packages/EcoVadis.AzureDevOps/)
 
 
 ```powershell
@@ -22,6 +20,7 @@ Use it.
 ```
 New-FEStealing "StealingFE" 13
 New-BEStealing "StealingBE" 14
+Get-TFSItem 101856
  ```
 ![Stealing](Images/StealingInTFS.png)
 

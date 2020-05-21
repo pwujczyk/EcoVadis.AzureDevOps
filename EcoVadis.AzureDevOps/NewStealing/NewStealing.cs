@@ -18,5 +18,10 @@ namespace EcoVadis.AzureDevOps
 
         [Parameter(HelpMessage = "By default stealing is closed if you want to leave it active set this flag")]
         public SwitchParameter LeaveActive { get; set; }
+
+        protected override void BeginProcessing()
+        {
+            base.BeginProcessing();
+        }
     }
 }
