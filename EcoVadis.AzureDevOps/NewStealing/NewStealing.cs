@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Management.Automation;
+using System.Reflection;
 using System.Text;
 using ProductivityTools.PSCmdlet;
 
@@ -16,5 +17,23 @@ namespace EcoVadis.AzureDevOps
 
         [Parameter(HelpMessage = "By default stealing is closed if you want to leave it active set this flag")]
         public SwitchParameter LeaveActive { get; set; }
+
+        protected override void BeginProcessing()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_BindingRedirect;
+            base.BeginProcessing();
+        }
+
+        private Assembly CurrentDomain_BindingRedirect(object sender, ResolveEventArgs args)
+        {
+            var name = new AssemblyName(args.Name);
+            switch (name.Name)
+            {
+                case "Newtonsoft.Json":
+                    return typeof(Newtonsoft.Json.JsonSerializer).Assembly;
+                default:
+                    return null;
+            }
+        }
     }
 }

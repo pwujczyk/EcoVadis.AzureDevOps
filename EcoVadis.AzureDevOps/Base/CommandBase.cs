@@ -1,7 +1,7 @@
-﻿using EcoVadis.AzureDevOps.App;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using EcoVadis.AzureDevOps.App;
 using ProductivityTools.PSCmdlet;
 
 namespace EcoVadis.AzureDevOps.Base

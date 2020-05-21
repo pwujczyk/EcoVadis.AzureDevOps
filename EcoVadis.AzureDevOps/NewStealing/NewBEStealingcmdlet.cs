@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Management.Automation;
+using System.Reflection;
 
 namespace EcoVadis.AzureDevOps
 {
@@ -10,8 +11,11 @@ namespace EcoVadis.AzureDevOps
     [Description("Adds stealing in the stealings")]
     public class NewBEStealingcmdlet : NewStealing
     {
-        public NewBEStealingcmdlet()
+        public NewBEStealingcmdlet() { }
+
+        protected override void BeginProcessing()
         {
+            base.BeginProcessing();
             base.AddCommand(new ReportStealingCommand(this, true));
         }
 
