@@ -10,7 +10,9 @@ namespace EcoVadis.AzureDevOps
     [Description("Adds stealing in the stealings")]
     public class NewBEStealingcmdlet : NewStealing
     {
-        public NewBEStealingcmdlet()
+        public NewBEStealingcmdlet() { }
+
+        protected override void BeginProcessing()
         {
             base.AddCommand(new ReportStealingCommand(this, true));
         }
