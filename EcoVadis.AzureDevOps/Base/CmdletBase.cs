@@ -10,7 +10,7 @@ namespace EcoVadis.AzureDevOps.Base
     {
         protected override void BeginProcessing()
         {
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_BindingRedirect;
+           AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_BindingRedirect;
             base.BeginProcessing();
         }
 

@@ -15,9 +15,9 @@ namespace EcoVadis.AzureDevOps.GetItem.Commands
 
         protected override void Invoke()
         {
-            var x=base.App.GetItemDetails(this.Cmdlet.Id);
-            var dump = ObjectDumper.Dump(x);
-            Console.WriteLine(dump);
+            //var x=base.App.GetItemDetails(this.Cmdlet.Id);
+            //var dump = ObjectDumper.Dump(x);
+           // Console.WriteLine(dump);
         }
     }
 }
