@@ -10,6 +10,8 @@ namespace EcoVadis.AzureDevOps.App.Facade
         public int Id { get; set; }
         public int StackRank { get; set; }
         public string Iteration { get; set; }
+        public float Estimation { get; set; }
+        public string Activity { get; set; }
 
         public List<WorkItemElement> WorkItems { get; set; }
     }

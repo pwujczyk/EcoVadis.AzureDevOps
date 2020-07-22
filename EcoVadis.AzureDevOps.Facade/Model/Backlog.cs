@@ -54,6 +54,13 @@ namespace EcoVadis.AzureDevOps.Facade.Model
             element.Title = workitem.Fields["System.Title"].ToString();
             element.Iteration = workitem.Fields["System.IterationPath"].ToString();
 
+            if (workitem.Fields.ContainsKey("Microsoft.VSTS.Scheduling.OriginalEstimate"))
+            {
+                element.Estimation = float.Parse(workitem.Fields["Microsoft.VSTS.Scheduling.OriginalEstimate"].ToString());
+            }
+            element.Activity = workitem.Fields["Microsoft.VSTS.Common.Activity"].ToString();
+
+
             foreach (var us in this.UserStories)
             {
                 if (us.Id == parentid)

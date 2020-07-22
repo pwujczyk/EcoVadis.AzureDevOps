@@ -22,5 +22,10 @@ namespace EcoVadis.AzureDevOps.App
         {
             TFS.MoveItemsToSprint(57, 63901);
         }
+
+        public void GetEstimations()
+        {
+            TFS.GetEstimations();
+        }
     }
 }

@@ -24,6 +24,27 @@ namespace EcoVadis.AzureDevOps.Facade
             WitClient = connection.GetClient<WorkItemTrackingHttpClient>();
         }
 
+        public void GetEstimations()
+        {
+            float feEstimation = 0, beEstimation = 0;
+            var result = GetBacklog();
+            foreach (var us in result.UserStories)
+            {
+                foreach (var element in us.WorkItems)
+                {
+                    if (element.Activity == "FE Development")
+                    {
+                        feEstimation += element.Estimation;
+                    }
+
+                    if (element.Activity == "BE Development")
+                    {
+                        beEstimation += element.Estimation;
+                    }
+                }
+            }
+        }
+
         public void MoveItemsToSprint(int targetSprint, int fromStackRank)
         {
             var result = GetBacklog();
