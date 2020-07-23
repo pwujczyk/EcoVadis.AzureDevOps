@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -24,88 +25,12 @@ namespace EcoVadis.AzureDevOps.Facade
             WitClient = connection.GetClient<WorkItemTrackingHttpClient>();
         }
 
-        public void GetEstimations()
+        public void UpdateIterationPath(int id, int iterationPath)
         {
-            float feEstimation = 0, beEstimation = 0;
-            var result = GetBacklog();
-            foreach (var us in result.UserStories)
-            {
-                foreach (var element in us.WorkItems)
-                {
-                    if (element.Activity == "FE Development")
-                    {
-                        feEstimation += element.Estimation;
-                    }
-
-                    if (element.Activity == "BE Development")
-                    {
-                        beEstimation += element.Estimation;
-                    }
-                }
-            }
-        }
-
-        public void MoveItemsToSprint(int targetSprint, int fromStackRank)
-        {
-            var result = GetBacklog();
-            foreach (var us in result.UserStories)
-            {
-                if (us.StackRank >= fromStackRank)
-                {
-                    foreach (var element in us.WorkItems)
-                    {
-                        UpdateIterationPath(element.Id, targetSprint);
-                    }
-                    UpdateIterationPath(us.Id, targetSprint);
-                }
-            }
-        }
-
-        private void UpdateIterationPath(int id, int iterationPath)
-        {
-            if (id == 83434 || id == 84332) return;
             Dictionary<string, object> fields = new Dictionary<string, object>();
 
             fields.Add("System.IterationPath", $"EcoVadisApp\\Sprint {iterationPath}");
             UpdateElement(id, fields);
-
-        }
-
-
-
-        public Backlog GetBacklog()
-        {
-            var result = new Backlog();
-
-            var items = WitClient.QueryByIdAsync(new Guid("faf2fea2-0224-4966-962c-4e8efea77609")).Result;
-            foreach (var item in items.WorkItemRelations)
-            {
-                AddElement(result, item.Target);
-                AddElement(result, item.Source);
-                //Dictionary<string, object> fields = new Dictionary<string, object>();
-                //Console.WriteLine(targetElement.Fields["System.Title"]);
-                //fields.Add("System.Title", "dd");
-                //UpdateElement(targetElement.Id.Value, fields);
-
-
-            }
-            return result;
-        }
-
-        private static void AddElement(Backlog result, WorkItemReference targetElementLink)
-        {
-            if (targetElementLink == null) return;
-            var targetElement = WitClient.GetWorkItemAsync(targetElementLink.Id, expand: WorkItemExpand.All).Result;
-
-            if (targetElement.Fields["System.WorkItemType"].ToString() == "User Story")
-            {
-                result.AddUserStory(targetElement);
-            }
-
-            if (targetElement.Fields["System.WorkItemType"].ToString() == "Eco Task")
-            {
-                result.AddWorkItem(targetElement);
-            }
         }
 
         public void UpdateElement(int id, Dictionary<string, object> fields)
@@ -122,5 +47,35 @@ namespace EcoVadis.AzureDevOps.Facade
 
             var x = WitClient.UpdateWorkItemAsync(patchDocument, id).Result;
         }
+
+        public Backlog GetBacklog(string queryId)
+        {
+            var result = new Backlog();
+
+            Action<WorkItemReference> AddElement = (targetElementLink) =>
+           {
+               if (targetElementLink == null) return;
+               var targetElement = WitClient.GetWorkItemAsync(targetElementLink.Id, expand: WorkItemExpand.All).Result;
+
+               if (targetElement.Fields["System.WorkItemType"].ToString() == "User Story")
+               {
+                   result.AddUserStory(targetElement);
+               }
+
+               if (targetElement.Fields["System.WorkItemType"].ToString() == "Eco Task")
+               {
+                   result.AddWorkItem(targetElement);
+               }
+           };
+
+            var items = WitClient.QueryByIdAsync(new Guid(queryId)).Result;
+            foreach (var item in items.WorkItemRelations)
+            {
+                AddElement(item.Target);
+                AddElement(item.Source);
+            }
+            return result;
+        }
+
     }
 }
