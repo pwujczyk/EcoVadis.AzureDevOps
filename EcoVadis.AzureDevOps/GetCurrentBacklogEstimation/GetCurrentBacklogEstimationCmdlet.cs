@@ -10,7 +10,7 @@ using System.Text;
 namespace EcoVadis.AzureDevOps.GetCurrentBacklogEstimation
 {
     [Cmdlet(VerbsCommon.Get, "CurrentBacklogEstimation")]
-    [Description("XX")]
+    [Description("")]
     public class GetCurrentBacklogEstimationCmdlet : CmdletBase
     {
         public GetCurrentBacklogEstimationCmdlet()

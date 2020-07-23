@@ -53,6 +53,8 @@ namespace EcoVadis.AzureDevOps.Facade.Model
             element.Id = workitem.Id.Value;
             element.Title = workitem.Fields["System.Title"].ToString();
             element.Iteration = workitem.Fields["System.IterationPath"].ToString();
+            element.Type= workitem.Fields["System.WorkItemType"].ToString();
+
 
             if (workitem.Fields.ContainsKey("Microsoft.VSTS.Scheduling.OriginalEstimate"))
             {

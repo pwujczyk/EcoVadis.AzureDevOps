@@ -33,6 +33,14 @@ namespace EcoVadis.AzureDevOps.Facade
             UpdateElement(id, fields);
         }
 
+        public void UpdateIsPlanned(int id, bool isPlanned)
+        {
+            Dictionary<string, object> fields = new Dictionary<string, object>();
+
+            fields.Add("Ecovadis.IsPlanned", isPlanned.ToString());
+            UpdateElement(id, fields);
+        }
+
         public void UpdateElement(int id, Dictionary<string, object> fields)
         {
             JsonPatchDocument patchDocument = new JsonPatchDocument();

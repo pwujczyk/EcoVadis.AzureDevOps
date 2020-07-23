@@ -28,7 +28,6 @@ namespace EcoVadis.AzureDevOps.App
 
         public void CreateStealing(string projectName, string username, string title, float time, string activity, bool leaveActive)
         {
-
             var stealingsUS = TFS.GetWorkItemWithRelations(StealingId);
 
             Dictionary<string, object> fields = new Dictionary<string, object>();
@@ -39,7 +38,6 @@ namespace EcoVadis.AzureDevOps.App
             fields.Add("System.AreaPath", stealingsUS.Fields["System.AreaPath"]);
             fields.Add("System.IterationPath", stealingsUS.Fields["System.IterationPath"]);
             fields.Add("Microsoft.VSTS.Scheduling.CompletedWork", time);
-
 
             var item = TFS.CreateWorkItem(projectName, "Eco Task", fields);
 

@@ -58,7 +58,21 @@ namespace EcoVadis.AzureDevOps.App
                 }
                 Console.WriteLine($"FE Estimation: {feEstimation}, BE Estimation: {beEstimation} - UserStory: {us.Title}");
             }
+        }
 
+        public void SetIsPlanned(bool value)
+        {
+            var backlog = TFS.GetBacklog(BacklogAN);
+            foreach (var us in backlog.UserStories)
+            {
+                foreach (var task in us.WorkItems)
+                {
+                    if (task.Type=="Eco Task")
+                    {
+                        TFS.UpdateIsPlanned(task.Id, value);
+                    }
+                }
+            }
         }
     }
 }
