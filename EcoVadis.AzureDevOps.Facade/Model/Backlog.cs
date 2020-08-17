@@ -65,9 +65,14 @@ namespace EcoVadis.AzureDevOps.Facade.Model
 
             foreach (var us in this.UserStories)
             {
+                //pw: add hierachy
                 if (us.Id == parentid)
                 {
-                    us.WorkItems.Add(element);
+                    var x1 = us.WorkItems.FirstOrDefault(x => x.Id == element.Id);
+                    if (x1 == null)
+                    {
+                        us.WorkItems.Add(element);
+                    }
                 }
             }
         }
