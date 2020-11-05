@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Management.Automation;
 using System.Reflection;
@@ -9,7 +10,7 @@ namespace EcoVadis.AzureDevOps
     {
         public void OnImport()
         {
-            AppDomain.CurrentDomain.AssemblyResolve += DependencyResolution.ResolveNewtonsoftJson;
+            AppDomain.CurrentDomain.AssemblyResolve += DependencyResolution.ResolveExtenionAbstraction;
         }
     }
 
@@ -24,7 +25,7 @@ namespace EcoVadis.AzureDevOps
     {
         public void OnRemove(PSModuleInfo psModuleInfo)
         {
-            AppDomain.CurrentDomain.AssemblyResolve -= DependencyResolution.ResolveNewtonsoftJson;
+            AppDomain.CurrentDomain.AssemblyResolve -= DependencyResolution.ResolveExtenionAbstraction;
         }
     }
 
@@ -33,14 +34,28 @@ namespace EcoVadis.AzureDevOps
         private static readonly string s_modulePath = Path.GetDirectoryName(
             Assembly.GetExecutingAssembly().Location);
 
-        public static Assembly ResolveNewtonsoftJson(object sender, ResolveEventArgs args)
+        private static List<string> assemblynames = new List<string>
+        {
+            "Microsoft.Extensions.Primitives",
+            "Microsoft.Extensions.Configuration.Abstractions",
+            "Microsoft.Extensions.FileProviders.Abstractions",
+            "Microsoft.Extensions.Configuration.FileExtensions",
+            "Microsoft.Extensions.FileProviders.Physical",
+            "Microsoft.Extensions.Configuration",
+            "System.Buffers",
+            "System.Runtime.CompilerServices.Unsafe",
+            "System.Numerics.Vectors",
+            "System.Text.Json",
+            "Newtonsoft.Json"
+        };
+        public static Assembly ResolveExtenionAbstraction(object sender, ResolveEventArgs args)
         {
             // Parse the assembly name
             var assemblyName = new AssemblyName(args.Name);
-
+            string name = assemblyName.Name;
             // We only want to handle the dependency we care about.
             // In this example it's Newtonsoft.Json.
-            if (!assemblyName.Name.Equals("Newtonsoft.Json"))
+            if (!assemblynames.Contains(name))
             {
                 return null;
             }
@@ -49,7 +64,7 @@ namespace EcoVadis.AzureDevOps
             // since it's the most likely to be compatible with all dependent assemblies.
             // The logic here assumes our module always has the version we want to load.
             // Also note the use of Assembly.LoadFrom() here rather than Assembly.LoadFile().
-            return Assembly.LoadFrom(Path.Combine(s_modulePath, "Newtonsoft.Json.dll"));
+            return Assembly.LoadFrom(Path.Combine(s_modulePath, $"{name}.dll"));
         }
     }
 }

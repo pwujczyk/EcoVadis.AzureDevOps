@@ -29,6 +29,12 @@ namespace EcoVadis.AzureDevOps.Commands
 
         protected override void Invoke()
         {
+            this.Cmdlet.WriteVerbose($"ProjectName {ProjectName}");
+            this.Cmdlet.WriteVerbose($"UserName {UserName}");
+            this.Cmdlet.WriteVerbose($"Name {this.Cmdlet.Name}");
+            this.Cmdlet.WriteVerbose($"Time {this.Cmdlet.Time}");
+            this.Cmdlet.WriteVerbose($"Activity {this.Activity}");
+            this.Cmdlet.WriteVerbose($"LeaveActive {this.Cmdlet.LeaveActive}");
             base.App.CreateStealing(ProjectName, UserName, this.Cmdlet.Name, this.Cmdlet.Time, this.Activity, this.Cmdlet.LeaveActive);
         }
     }
