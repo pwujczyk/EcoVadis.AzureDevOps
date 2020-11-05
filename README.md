@@ -9,8 +9,9 @@
         <img src="Images/Header/LogoTitle_green_500px.png" />
     </a>
 </p>
-# EcoVadis.AzureDevOps
 
+
+# EcoVadis.AzureDevOps
 
 ## Setup MasterConfiguration
 - Install PowerShell MasterConfiguration Module
@@ -38,9 +39,8 @@ Check if in the path c:\Users\pwujczyk\Documents\ProductivityTools.MasterConfigu
 ```powershell
 Install-Module -Name EcoVadis.AzureDevOps	
 ```
-- Create new file in the MasterConfiguration location
+- Create new file in the MasterConfiguration location **EcoVadis.AzureDevOps.json**
 
-![MasterConfiguration](Images/AzureConfiguration.png)
 ```
 {
   "TTTFSAddress":"https://azuredevops.ecovadis.com/EcoVadisApp_TeamProjectCollection/",
@@ -48,6 +48,9 @@ Install-Module -Name EcoVadis.AzureDevOps
   "TTuserName":"Pawel Wujczyk <PRD\\pwujczyk>",
 }
 ```
+
+![MasterConfiguration](Images/AzureConfiguration.png)
+
 
 Use it.
 
