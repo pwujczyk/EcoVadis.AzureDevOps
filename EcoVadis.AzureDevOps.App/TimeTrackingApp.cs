@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Security.Cryptography;
 
 namespace EcoVadis.AzureDevOps.App
 {
@@ -45,14 +46,18 @@ namespace EcoVadis.AzureDevOps.App
 
             fields.Clear();
             fields.Add("State", "Active");
-            TFS.UpdateWorkItem(item.Id.Value, fields);
-
+            var r=TFS.UpdateWorkItem(item.Id.Value, fields);
+            Console.WriteLine(r.Url);
             if (leaveActive == false)
             {
                 fields.Clear();
                 fields.Add("State", "Closed");
-                TFS.UpdateWorkItem(item.Id.Value, fields);
+                var r2=TFS.UpdateWorkItem(item.Id.Value, fields);
+                Console.WriteLine(r2.Url);
             }
+
+            
+            
         }
     }
 }

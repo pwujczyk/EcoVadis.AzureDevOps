@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using EcoVadis.AzureDevOps.App;
+using Microsoft.Extensions.Configuration;
+using ProductivityTools.MasterConfiguration;
 using ProductivityTools.PSCmdlet;
 
 namespace EcoVadis.AzureDevOps.Base
@@ -25,9 +27,14 @@ namespace EcoVadis.AzureDevOps.Base
                    return var;
                };
 
-            TfsAddress = GetVariable("TTTFSAddress");
-            PAT = GetVariable("TTPAT");
-            UserName = GetVariable("TTuserName");
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .AddMasterConfiguration()
+                .Build();
+
+
+            TfsAddress = configuration["TTTFSAddress"];
+            PAT = configuration["TTPAT"];
+            UserName = configuration["TTuserName"];
 
             App = new TimeTrackingApp(TfsAddress, PAT);
         }
