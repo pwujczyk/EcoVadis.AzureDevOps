@@ -12,17 +12,20 @@ using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EcoVadis.AzureDevOps.Facade
 {
     public class BacklogManagement
     {
         static WorkItemTrackingHttpClient WitClient;
+        Action<string> Verbose;
 
-        public BacklogManagement(string tfsAddress, string personalAccessToken)
+        public BacklogManagement(string tfsAddress, string personalAccessToken, Action<string> verbose)
         {
             VssConnection connection = new VssConnection(new Uri(tfsAddress), new VssBasicCredential(string.Empty, personalAccessToken));
             WitClient = connection.GetClient<WorkItemTrackingHttpClient>();
+            this.Verbose = verbose;
         }
 
         public void UpdateIterationPath(int id, int iterationPath)
@@ -56,14 +59,14 @@ namespace EcoVadis.AzureDevOps.Facade
             var x = WitClient.UpdateWorkItemAsync(patchDocument, id).Result;
         }
 
-        public Backlog GetBacklog(string queryId)
+        public async Task<Backlog> GetBacklog(string queryId)
         {
             var result = new Backlog();
 
-            Action<WorkItemReference> AddElement = (targetElementLink) =>
+            Action<WorkItemReference> AddElement = async (targetElementLink) =>
            {
                if (targetElementLink == null) return;
-               var targetElement = WitClient.GetWorkItemAsync(targetElementLink.Id, expand: WorkItemExpand.All).Result;
+               var targetElement = await WitClient.GetWorkItemAsync(targetElementLink.Id, expand: WorkItemExpand.All);
 
                if (targetElement.Fields["System.WorkItemType"].ToString() == "User Story")
                {
@@ -76,12 +79,13 @@ namespace EcoVadis.AzureDevOps.Facade
                }
            };
 
+            Verbose("Loading Backlog to structure");
             var items = WitClient.QueryByIdAsync(new Guid(queryId)).Result;
-            foreach (var item in items.WorkItemRelations)
-            {
-                AddElement(item.Target);
-                AddElement(item.Source);
-            }
+            Parallel.ForEach(items.WorkItemRelations, item =>
+             {
+                 AddElement(item.Target);
+                 AddElement(item.Source);
+             });
             return result;
         }
 

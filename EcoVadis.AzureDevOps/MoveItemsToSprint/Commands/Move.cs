@@ -14,7 +14,7 @@ namespace EcoVadis.AzureDevOps.MoveItemsToSprint.Commands
 
         protected override void Invoke()
         {
-            BacklogManagmenetApp app = new BacklogManagmenetApp(TfsAddress, PAT);
+            BacklogManagmenetApp app = new BacklogManagmenetApp(TfsAddress, PAT, this.Cmdlet.WriteVerbose);
             app.MoveElementsToNext(this.Cmdlet.TargetSprint, this.Cmdlet.FromStackRank);
         }
     }

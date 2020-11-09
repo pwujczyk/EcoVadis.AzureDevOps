@@ -22,11 +22,11 @@ namespace EcoVadis.AzureDevOps.SetIsPlanned
         protected override void BeginProcessing()
         {
             base.BeginProcessing();
-            base.AddCommand(new Set(this));
         }
 
         protected override void ProcessRecord()
         {
+            base.AddCommand(new Set(this));
             base.ProcessCommands();
             base.ProcessRecord();
         }

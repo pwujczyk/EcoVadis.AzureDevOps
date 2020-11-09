@@ -74,6 +74,16 @@ namespace EcoVadis.AzureDevOps.Facade.Model
                         us.WorkItems.Add(element);
                     }
                 }
+                else
+                {
+                    foreach (var task in us.WorkItems)
+                    {
+                        if (task.Id == parentid)
+                        {
+                            task.WorkItems.Add(element);
+                        }
+                    }
+                }
             }
         }
     }

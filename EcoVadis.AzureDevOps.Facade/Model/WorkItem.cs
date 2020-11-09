@@ -14,5 +14,10 @@ namespace EcoVadis.AzureDevOps.App.Facade
         public string Type { get; set; }
 
         public List<WorkItemElement> WorkItems { get; set; }
+
+        public WorkItemElement()
+        {
+            this.WorkItems = new List<WorkItemElement>();
+        }
     }
 }

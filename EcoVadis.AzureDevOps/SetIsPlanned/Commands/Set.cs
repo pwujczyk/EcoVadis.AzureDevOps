@@ -16,7 +16,7 @@ namespace EcoVadis.AzureDevOps.SetIsPlanned.Commands
 
         protected override void Invoke()
         {
-            BacklogManagmenetApp app = new BacklogManagmenetApp(TfsAddress, PAT);
+            BacklogManagmenetApp app = new BacklogManagmenetApp(TfsAddress, PAT, this.Cmdlet.WriteVerbose);
             app.SetIsPlanned(this.Cmdlet.Value);
         }
     }
