@@ -62,4 +62,14 @@ Get-TFSItem 101856
 ![Stealing](Images/StealingInTFS.png)
 
 
+## Move-ItemsToSprint
+
+
+Moving all users stories which will greater or equal 99999999
+
+```PowerShell
+Move-ItemsToSprint -TargetSprint 64 -FromStackRank 99999999 -Verbose
+```
+
+
 

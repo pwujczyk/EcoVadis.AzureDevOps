@@ -2,6 +2,7 @@
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,11 +11,11 @@ namespace EcoVadis.AzureDevOps.Facade.Model
 {
     public class Backlog
     {
-        public List<UserStory> UserStories { get; set; }
+        public ConcurrentBag<UserStory> UserStories { get; set; }
 
         public Backlog()
         {
-            this.UserStories = new List<UserStory>();
+            this.UserStories = new ConcurrentBag<UserStory>();
         }
 
         public void AddUserStory(WorkItem workItem)

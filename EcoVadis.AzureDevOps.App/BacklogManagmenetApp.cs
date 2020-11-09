@@ -25,26 +25,34 @@ namespace EcoVadis.AzureDevOps.App
 
         public async void MoveElementsToNext(int targetSprint, int fromStackRank)
         {
-            var result = await this.TFS.GetBacklog(BacklogAN);
-            foreach (var us in result.UserStories)
+            var result = this.TFS.GetBacklog(BacklogAN);
+            Verbose($"Found {result.UserStories.Count} in Backlog");
+            foreach (var us in result.UserStories.OrderBy(x=>x.StackRank))
             {
-                if (us.Id == 83434 || us.Id == 84332) continue;
+               // if (us.Id == 83434 || us.Id == 84332) continue;
+                Verbose($"UserStory {us.Id} \t has stack rank {us.StackRank}");
                 if (us.StackRank >= fromStackRank)
                 {
                     foreach (var element in us.WorkItems)
                     {
-                        this.TFS.UpdateIterationPath(element.Id, targetSprint);
+                        await this.TFS.UpdateIterationPath(element.Id, targetSprint);
+
+                        foreach (var subelement in element.WorkItems)
+                        {
+                            await this.TFS.UpdateIterationPath(subelement.Id, targetSprint);
+                        }
                     }
 
-                    this.TFS.UpdateIterationPath(us.Id, targetSprint);
+                    Verbose($"UserStory {us.Id} \t moved to sprint {targetSprint}");
+                    await this.TFS.UpdateIterationPath(us.Id, targetSprint);
                 }
             }
         }
 
-        public async void GetEstimations()
+        public void GetEstimations()
         {
             float feEstimation = 0, beEstimation = 0;
-            var result = await TFS.GetBacklog(BacklogAN);
+            var result = TFS.GetBacklog(BacklogAN);
             foreach (var us in result.UserStories.OrderBy(x => x.StackRank))
             {
                 foreach (var element in us.WorkItems)
@@ -65,20 +73,20 @@ namespace EcoVadis.AzureDevOps.App
 
         public async void SetIsPlanned(bool value)
         {
-            var backlog = await TFS.GetBacklog(BacklogAN);
+            var backlog = TFS.GetBacklog(BacklogAN);
             foreach (var us in backlog.UserStories)
             {
                 foreach (var task in us.WorkItems)
                 {
                     if (task.Type=="Eco Task")
                     {
-                        TFS.UpdateIsPlanned(task.Id, value);
+                        await TFS.UpdateIsPlanned(task.Id, value);
                     }
                     foreach(var subtask in task.WorkItems)
                     {
                         if (task.Type == "Eco Task")
                         {
-                            TFS.UpdateIsPlanned(subtask.Id, value);
+                            await TFS.UpdateIsPlanned(subtask.Id, value);
                         }
                     }
                 }

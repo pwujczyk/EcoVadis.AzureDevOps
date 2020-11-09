@@ -1,5 +1,6 @@
 ﻿using EcoVadis.AzureDevOps.App.Facade;
 using EcoVadis.AzureDevOps.Facade.Model;
+using Microsoft.TeamFoundation.Build.WebApi;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 using Microsoft.VisualStudio.Services.Common;
@@ -28,23 +29,23 @@ namespace EcoVadis.AzureDevOps.Facade
             this.Verbose = verbose;
         }
 
-        public void UpdateIterationPath(int id, int iterationPath)
+        public async Task UpdateIterationPath(int id, int iterationPath)
         {
             Dictionary<string, object> fields = new Dictionary<string, object>();
 
             fields.Add("System.IterationPath", $"EcoVadisApp\\Sprint {iterationPath}");
-            UpdateElement(id, fields);
+            await UpdateElement(id, fields);
         }
 
-        public void UpdateIsPlanned(int id, bool isPlanned)
+        public async Task UpdateIsPlanned(int id, bool isPlanned)
         {
             Dictionary<string, object> fields = new Dictionary<string, object>();
 
             fields.Add("Ecovadis.IsPlanned", isPlanned.ToString());
-            UpdateElement(id, fields);
+            await UpdateElement(id, fields);
         }
 
-        public void UpdateElement(int id, Dictionary<string, object> fields)
+        public async Task UpdateElement(int id, Dictionary<string, object> fields)
         {
             JsonPatchDocument patchDocument = new JsonPatchDocument();
 
@@ -56,36 +57,40 @@ namespace EcoVadis.AzureDevOps.Facade
                     Value = fields[key]
                 });
 
-            var x = WitClient.UpdateWorkItemAsync(patchDocument, id).Result;
+            var x = await WitClient.UpdateWorkItemAsync(patchDocument, id);
         }
 
-        public async Task<Backlog> GetBacklog(string queryId)
+        public Backlog GetBacklog(string queryId)
         {
             var result = new Backlog();
 
-            Action<WorkItemReference> AddElement = async (targetElementLink) =>
-           {
-               if (targetElementLink == null) return;
-               var targetElement = await WitClient.GetWorkItemAsync(targetElementLink.Id, expand: WorkItemExpand.All);
+            Action<WorkItemReference> AddElement = (targetElementLink) =>
+            {
+                if (targetElementLink == null) return;
+                var targetElement = WitClient.GetWorkItemAsync(targetElementLink.Id, expand: WorkItemExpand.All).Result;
 
-               if (targetElement.Fields["System.WorkItemType"].ToString() == "User Story")
-               {
-                   result.AddUserStory(targetElement);
-               }
+                if (targetElement.Fields["System.WorkItemType"].ToString() == "User Story")
+                {
+                    result.AddUserStory(targetElement);
+                }
 
-               if (targetElement.Fields["System.WorkItemType"].ToString() == "Eco Task")
-               {
-                   result.AddWorkItem(targetElement);
-               }
-           };
+                if (targetElement.Fields["System.WorkItemType"].ToString() == "Eco Task")
+                {
+                    result.AddWorkItem(targetElement);
+                }
+            };
 
             Verbose("Loading Backlog to structure");
             var items = WitClient.QueryByIdAsync(new Guid(queryId)).Result;
+
             Parallel.ForEach(items.WorkItemRelations, item =>
              {
                  AddElement(item.Target);
                  AddElement(item.Source);
              });
+
+
+
             return result;
         }
 

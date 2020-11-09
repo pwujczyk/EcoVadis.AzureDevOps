@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,9 +14,9 @@ namespace EcoVadis.AzureDevOps.App.Facade
 
         public  UserStory()
         {
-            this.WorkItems = new List<WorkItemElement>();
+            this.WorkItems = new ConcurrentBag<WorkItemElement>();
         }
 
-        public List<WorkItemElement> WorkItems { get; set; }
+        public ConcurrentBag<WorkItemElement> WorkItems { get; set; }
     }
 }
