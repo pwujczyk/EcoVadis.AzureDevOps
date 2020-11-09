@@ -11,7 +11,11 @@
 </p>
 
 
-# EcoVadis.AzureDevOps
+# EcoVadis AzureDevOps
+
+Module is written to help manage tasks on the AzureDevOps.  It is module dedicated for my team at EcoVadis.
+
+<!--more-->
 
 ## Setup MasterConfiguration
 - Install PowerShell MasterConfiguration Module
