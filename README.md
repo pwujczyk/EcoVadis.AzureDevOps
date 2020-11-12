@@ -28,7 +28,7 @@ Install-Module -Name ProductivityTools.PSMasterConfiguration
 ```powershell
 Set-MasterConfiguration
 ```
-Check if in the path c:\Users\pwujczyk\Documents\ProductivityTools.MasterConfiguration\
+Check if in the path c:\\Users\\pwujczyk\\Documents\\ProductivityTools.MasterConfiguration\\
  you have json file
 
  ![MasterConfiguration](Images/Masterconfiguration.png)
@@ -47,9 +47,9 @@ Install-Module -Name EcoVadis.AzureDevOps
 
 ```
 {
-  "TTTFSAddress":"https://azuredevops.ecovadis.com/EcoVadisApp_TeamProjectCollection/",
-  "TTpat":"ti45xwu6mmeakxrcdmdpg7kadefdsk6gc4sxa",
-  "TTuserName":"Pawel Wujczyk <PRD\\pwujczyk>",
+    "TTTFSAddress":"https://azuredevops.ecovadis.com/EcoVadisApp_TeamProjectCollection/",
+    "TTpat":"ti45xwu6mmeakxrcdmdpg7kadefdsk6gc4sxa",
+    "TTuserName":"Pawel Wujczyk <PRD\\pwujczyk>",
 }
 ```
 
@@ -75,5 +75,10 @@ Moving all users stories which will greater or equal 99999999
 Move-ItemsToSprint -TargetSprint 64 -FromStackRank 99999999 -Verbose
 ```
 
+## Calculate Sprint hours
+
+```PowerShell
+Get-CurrentBacklogEstimation
+```
 
 
