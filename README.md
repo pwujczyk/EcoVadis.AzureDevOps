@@ -81,4 +81,11 @@ Move-ItemsToSprint -TargetSprint 64 -FromStackRank 99999999 -Verbose
 Get-CurrentBacklogEstimation
 ```
 
+# Set-IsPlanned
 
+Command sets **IsPlanned** flag to all tasks in given query.
+
+```PowerShell
+Set-IsPlanned 
+Set-IsPlanned -Value $true
+```

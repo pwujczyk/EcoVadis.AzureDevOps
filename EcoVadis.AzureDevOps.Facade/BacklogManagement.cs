@@ -83,11 +83,18 @@ namespace EcoVadis.AzureDevOps.Facade
             Verbose("Loading Backlog to structure");
             var items = WitClient.QueryByIdAsync(new Guid(queryId)).Result;
 
-            Parallel.ForEach(items.WorkItemRelations, item =>
-             {
-                 AddElement(item.Target);
-                 AddElement(item.Source);
-             });
+            items.WorkItemRelations.ForEach(item =>
+            {
+                AddElement(item.Target);
+                AddElement(item.Source);
+            });
+
+            //it cannot be paraller because sometimes we can add task without adding pant
+            //Parallel.ForEach(items.WorkItemRelations, item =>
+            // {
+            //     AddElement(item.Target);
+            //     AddElement(item.Source);
+            // });
 
 
 

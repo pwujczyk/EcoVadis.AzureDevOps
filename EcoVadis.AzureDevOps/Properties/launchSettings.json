@@ -3,7 +3,7 @@
     "EcoVadis.AzureDevOps": {
       "commandName": "Executable",
       "executablePath": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
-      "commandLineArgs": "-noexit -command \"import-module D:\\GitHub\\EcoVadis.AzureDevOps\\EcoVadis.AzureDevOps\\bin\\Debug\\netstandard2.0\\EcoVadis.AzureDevOps.dll",
+      "commandLineArgs": "-noexit -command \"import-module d:\\GitHub-3.PublishedToLinkedIn\\EcoVadis.AzureDevOps\\EcoVadis.AzureDevOps\\bin\\Debug\\netstandard2.0\\EcoVadis.AzureDevOps.dll",
       "environmentVariables": {
         "MasterConfigurationPath": "d:\\BitBucket\\All.Configuration\\",
         "ASPNETCORE_ENVIRONMENT": "MasterConfiguration"
