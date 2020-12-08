@@ -81,7 +81,7 @@ Move-ItemsToSprint -TargetSprint 64 -FromStackRank 99999999 -Verbose
 Get-CurrentBacklogEstimation
 ```
 
-# Set-IsPlanned
+## Set-IsPlanned
 
 Command sets **IsPlanned** flag to all tasks in given query.
 
@@ -89,3 +89,12 @@ Command sets **IsPlanned** flag to all tasks in given query.
 Set-IsPlanned 
 Set-IsPlanned -Value $true
 ```
+
+## Add-ProgressiveRollout
+
+```PowerShell
+Add-FEProgressiveRollout 113937
+Add-FEProgressiveRollout 113937 -Silent
+```
+
+If the task already exist cmdlet will throw exception, unless you will use -Silent switch.
