@@ -95,20 +95,19 @@ namespace EcoVadis.AzureDevOps.App
             }
         }
 
-        public void AddProgressiveRollout(string projectName, int usId)
+        public void AddProgressiveRollout(string projectName, int usId, string activity, bool silent)
         {
-            CreateTask(projectName, usId, "Progressive rollout", "BE Development",false);
-            CreateTask(projectName, usId, "Progressive rollout", "FE Development",false);
+            CreateTask(projectName, usId, "Progressive rollout", activity, silent);
         }
 
         public void CreateTask(string projectName, int parentUS, string title, string activity, bool silent)
         {
             var stealingsUS = TFS2.GetWorkItemWithRelations(parentUS);
-            foreach(var link in stealingsUS.Relations)
+            foreach (var link in stealingsUS.Relations)
             {
                 int usid = int.Parse(link.Url.Split('/').Last());
-                var task=TFS2.GetWorkItemWithRelations(usid);
-                if (task.Fields["System.Title"].ToString()== title && task.Fields["Microsoft.VSTS.Common.Activity"].ToString() == activity)
+                var task = TFS2.GetWorkItemWithRelations(usid);
+                if (task.Fields["System.Title"].ToString() == title && task.Fields["Microsoft.VSTS.Common.Activity"].ToString() == activity)
                 {
                     if (silent)
                     {
