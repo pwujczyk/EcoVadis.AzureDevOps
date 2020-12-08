@@ -12,6 +12,7 @@ namespace EcoVadis.AzureDevOps.App
         private readonly string TfsUrl;
         private readonly string PAT;
         private BacklogManagement TFS;
+        private TFS TFS2;
         private string BacklogAN = "faf2fea2-0224-4966-962c-4e8efea77609";
         private Action<string> Verbose;
 
@@ -20,6 +21,7 @@ namespace EcoVadis.AzureDevOps.App
             this.TfsUrl = tfsUrl;
             this.PAT = pat;
             this.TFS = new BacklogManagement(this.TfsUrl, this.PAT, verbose);
+            this.TFS2 = new TFS(this.TfsUrl, this.PAT);
             this.Verbose = verbose;
         }
 
@@ -27,9 +29,9 @@ namespace EcoVadis.AzureDevOps.App
         {
             var result = this.TFS.GetBacklog(BacklogAN);
             Verbose($"Found {result.UserStories.Count} in Backlog");
-            foreach (var us in result.UserStories.OrderBy(x=>x.StackRank))
+            foreach (var us in result.UserStories.OrderBy(x => x.StackRank))
             {
-               // if (us.Id == 83434 || us.Id == 84332) continue;
+                // if (us.Id == 83434 || us.Id == 84332) continue;
                 Verbose($"UserStory {us.Id} \t has stack rank {us.StackRank}");
                 if (us.StackRank >= fromStackRank)
                 {
@@ -78,11 +80,11 @@ namespace EcoVadis.AzureDevOps.App
             {
                 foreach (var task in us.WorkItems)
                 {
-                    if (task.Type=="Eco Task")
+                    if (task.Type == "Eco Task")
                     {
                         await TFS.UpdateIsPlanned(task.Id, value);
                     }
-                    foreach(var subtask in task.WorkItems)
+                    foreach (var subtask in task.WorkItems)
                     {
                         if (task.Type == "Eco Task")
                         {
@@ -91,6 +93,46 @@ namespace EcoVadis.AzureDevOps.App
                     }
                 }
             }
+        }
+
+        public void AddProgressiveRollout(string projectName, int usId)
+        {
+            CreateTask(projectName, usId, "Progressive rollout", "BE Development",false);
+            CreateTask(projectName, usId, "Progressive rollout", "FE Development",false);
+        }
+
+        public void CreateTask(string projectName, int parentUS, string title, string activity, bool silent)
+        {
+            var stealingsUS = TFS2.GetWorkItemWithRelations(parentUS);
+            foreach(var link in stealingsUS.Relations)
+            {
+                int usid = int.Parse(link.Url.Split('/').Last());
+                var task=TFS2.GetWorkItemWithRelations(usid);
+                if (task.Fields["System.Title"].ToString()== title && task.Fields["Microsoft.VSTS.Common.Activity"].ToString() == activity)
+                {
+                    if (silent)
+                    {
+                        return;
+                    }
+                    throw new Exception($"Task with this name {title} and activity {activity} already exists");
+                }
+            }
+
+            Dictionary<string, object> fields = new Dictionary<string, object>();
+            fields.Add("Title", title);
+            fields.Add("Activity", activity);
+            fields.Add("Priority", 1);
+            // fields.Add("System.AssignedTo", username);
+            fields.Add("System.AreaPath", stealingsUS.Fields["System.AreaPath"]);
+            fields.Add("System.IterationPath", stealingsUS.Fields["System.IterationPath"]);
+            //fields.Add("Microsoft.VSTS.Scheduling.CompletedWork", time);
+
+            var item = TFS2.CreateWorkItem(projectName, "Eco Task", fields);
+
+            TFS2.AddParentLink(item.Id.Value, parentUS);
+
+            fields.Clear();
+            Console.WriteLine(item.Url);
         }
     }
 }

@@ -55,9 +55,9 @@ namespace EcoVadis.AzureDevOps.App
                 var r2=TFS.UpdateWorkItem(item.Id.Value, fields);
                 Console.WriteLine(r2.Url);
             }
-
-            
-            
         }
+
+
+       
     }
 }

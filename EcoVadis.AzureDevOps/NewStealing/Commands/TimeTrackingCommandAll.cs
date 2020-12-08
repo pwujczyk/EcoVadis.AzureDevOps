@@ -9,7 +9,7 @@ namespace EcoVadis.AzureDevOps.Commands
 {
     public class ReportStealingCommand : CommandBase<NewStealing>
     {
-        private const string ProjectName = "EcoVadisApp";
+        
         private readonly string Activity;
 
 

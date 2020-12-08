@@ -14,6 +14,7 @@ namespace EcoVadis.AzureDevOps.Base
         protected string PAT;
         protected string UserName;
         protected TimeTrackingApp App;
+        protected const string ProjectName = "EcoVadisApp";
 
         public CommandBase(CmdletType cmdlet) : base(cmdlet)
         {
