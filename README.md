@@ -98,3 +98,14 @@ Add-FEProgressiveRollout 113937 -Silent
 ```
 
 If the task already exist cmdlet will throw exception, unless you will use -Silent switch.
+
+## Add-Testing
+
+It creates two items: Test Case and Testing task for given US.
+
+```PowerShell
+Add-Testing113937
+Add-Testing 113937 -Silent
+```
+
+If the task already exist cmdlet will throw exception, unless you will use -Silent switch.

@@ -95,6 +95,12 @@ namespace EcoVadis.AzureDevOps.App
             }
         }
 
+        public void AddTesting(string projectName, int usId, string activity, bool silent)
+        {
+            CreateTask(projectName, usId, "Testing", activity, silent);
+            CreateTask(projectName, usId, "Test Case", activity, silent);
+        }
+
         public void AddProgressiveRollout(string projectName, int usId, string activity, bool silent)
         {
             CreateTask(projectName, usId, "Progressive rollout", activity, silent);
