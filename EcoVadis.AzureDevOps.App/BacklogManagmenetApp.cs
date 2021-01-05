@@ -1,5 +1,6 @@
 ﻿using EcoVadis.AzureDevOps.Facade;
 using Microsoft.TeamFoundation.TestManagement.WebApi;
+using Microsoft.VisualStudio.Services.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,9 +26,45 @@ namespace EcoVadis.AzureDevOps.App
             this.Verbose = verbose;
         }
 
+        public async void MoveNotClosedElementsToNext(int targetSprint)
+        {
+            List<string> moveUsStatuses = new List<string> { "Dev Active","L2 Approved" };
+            List<string> moveTasksStatuses = new List<string> { "New", "Active", "Code Review" };
+
+            var result = this.TFS.GetBacklog(BacklogAN, true);
+            Verbose($"Found {result.UserStories.Count} in Backlog");
+            foreach (var us in result.UserStories)
+            {
+                // if (us.Id == 83434 || us.Id == 84332) continue;
+                Verbose($"UserStory {us.Id} - {us.Title} \t has status {us.Status}");
+                if (moveUsStatuses.Contains(us.Status))
+                {
+                    foreach (var element in us.WorkItems)
+                    {
+                        if (moveTasksStatuses.Contains(element.Status))
+                        {
+                            await this.TFS.UpdateIterationPath(element.Id, targetSprint);
+
+                            foreach (var subelement in element.WorkItems)
+                            {
+                                if (moveTasksStatuses.Contains(subelement.Status))
+                                {
+                                    await this.TFS.UpdateIterationPath(subelement.Id, targetSprint);
+                                }
+                            }
+                        }
+                    }
+
+
+                    Verbose($"UserStory {us.Id} \t moved to sprint {targetSprint}");
+                    await this.TFS.UpdateIterationPath(us.Id, targetSprint);
+                }
+            }
+        }
+
         public async void MoveElementsToNext(int targetSprint, int fromStackRank)
         {
-            var result = this.TFS.GetBacklog(BacklogAN);
+            var result = this.TFS.GetBacklog(BacklogAN, false);
             Verbose($"Found {result.UserStories.Count} in Backlog");
             foreach (var us in result.UserStories.OrderBy(x => x.StackRank))
             {
@@ -54,7 +91,7 @@ namespace EcoVadis.AzureDevOps.App
         public void GetEstimations()
         {
             float feEstimation = 0, beEstimation = 0;
-            var result = TFS.GetBacklog(BacklogAN);
+            var result = TFS.GetBacklog(BacklogAN, false);
             foreach (var us in result.UserStories.OrderBy(x => x.StackRank))
             {
                 foreach (var element in us.WorkItems)
@@ -75,7 +112,7 @@ namespace EcoVadis.AzureDevOps.App
 
         public async void SetIsPlanned(bool value)
         {
-            var backlog = TFS.GetBacklog(BacklogAN);
+            var backlog = TFS.GetBacklog(BacklogAN, false);
             foreach (var us in backlog.UserStories)
             {
                 foreach (var task in us.WorkItems)

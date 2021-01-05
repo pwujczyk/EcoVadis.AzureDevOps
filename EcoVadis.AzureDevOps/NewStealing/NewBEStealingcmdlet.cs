@@ -9,9 +9,9 @@ namespace EcoVadis.AzureDevOps
 {
     [Cmdlet(VerbsCommon.New, "BEStealing")]
     [Description("Adds stealing in the stealings")]
-    public class NewBEStealingcmdlet : NewStealing
+    public class NewBEStealingCmdlet : NewStealing
     {
-        public NewBEStealingcmdlet() { }
+        public NewBEStealingCmdlet() { }
 
         protected override void BeginProcessing()
         {

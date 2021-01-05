@@ -24,6 +24,7 @@ namespace EcoVadis.AzureDevOps.Facade.Model
             us.Id = workItem.Id.Value;
             us.Title = workItem.Fields["System.Title"].ToString();
             us.Iteration = workItem.Fields["System.IterationPath"].ToString();
+            us.Status = workItem.Fields["System.State"].ToString();
             if (workItem.Fields.ContainsKey("Microsoft.VSTS.Common.StackRank"))
             {
                 us.StackRank = int.Parse(workItem.Fields["Microsoft.VSTS.Common.StackRank"].ToString());
@@ -39,10 +40,10 @@ namespace EcoVadis.AzureDevOps.Facade.Model
             }
         }
 
-        public void AddWorkItem(WorkItem workitem)
+        public void AddWorkItem(WorkItem workItem)
         {
             int parentid = -1;
-            foreach (var x in workitem.Relations)
+            foreach (var x in workItem.Relations)
             {
                 if (x.Rel == "System.LinkTypes.Hierarchy-Reverse")
                 {
@@ -51,17 +52,17 @@ namespace EcoVadis.AzureDevOps.Facade.Model
             }
 
             WorkItemElement element = new WorkItemElement();
-            element.Id = workitem.Id.Value;
-            element.Title = workitem.Fields["System.Title"].ToString();
-            element.Iteration = workitem.Fields["System.IterationPath"].ToString();
-            element.Type= workitem.Fields["System.WorkItemType"].ToString();
+            element.Id = workItem.Id.Value;
+            element.Title = workItem.Fields["System.Title"].ToString();
+            element.Iteration = workItem.Fields["System.IterationPath"].ToString();
+            element.Type = workItem.Fields["System.WorkItemType"].ToString();
+            element.Status = workItem.Fields["System.State"].ToString();
 
-
-            if (workitem.Fields.ContainsKey("Microsoft.VSTS.Scheduling.OriginalEstimate"))
+            if (workItem.Fields.ContainsKey("Microsoft.VSTS.Scheduling.OriginalEstimate"))
             {
-                element.Estimation = float.Parse(workitem.Fields["Microsoft.VSTS.Scheduling.OriginalEstimate"].ToString());
+                element.Estimation = float.Parse(workItem.Fields["Microsoft.VSTS.Scheduling.OriginalEstimate"].ToString());
             }
-            element.Activity = workitem.Fields["Microsoft.VSTS.Common.Activity"].ToString();
+            element.Activity = workItem.Fields.ContainsKey("Microsoft.VSTS.Common.Activity") ? workItem.Fields["Microsoft.VSTS.Common.Activity"].ToString() : string.Empty;
 
 
             foreach (var us in this.UserStories)

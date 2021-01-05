@@ -60,7 +60,7 @@ namespace EcoVadis.AzureDevOps.Facade
             var x = await WitClient.UpdateWorkItemAsync(patchDocument, id);
         }
 
-        public Backlog GetBacklog(string queryId)
+        public Backlog GetBacklog(string queryId, bool withBugs)
         {
             var result = new Backlog();
 
@@ -75,6 +75,11 @@ namespace EcoVadis.AzureDevOps.Facade
                 }
 
                 if (targetElement.Fields["System.WorkItemType"].ToString() == "Eco Task")
+                {
+                    result.AddWorkItem(targetElement);
+                }
+
+                if (withBugs && targetElement.Fields["System.WorkItemType"].ToString() == "eco Bug")
                 {
                     result.AddWorkItem(targetElement);
                 }
