@@ -66,13 +66,22 @@ Get-TFSItem 101856
 ![Stealing](Images/StealingInTFS.png)
 
 
-## Move-ItemsToSprint
+## Move-ItemsToSprint - from stack rank
 
 
 Moving all users stories which will greater or equal 99999999
 
 ```PowerShell
 Move-ItemsToSprint -TargetSprint 64 -FromStackRank 99999999 -Verbose
+```
+
+## Move-ItemsToSprint - not closed
+
+
+Moving all users stories which are in the status "Dev Active","L2 Approved", move all tasks and eco Bugs which are in the status "New", "Active", "Code Review", to given sprint.
+
+```PowerShell
+Move-ItemsToSprint -NotClosed -TargetSprint 68 -Verbose
 ```
 
 ## Calculate Sprint hours
