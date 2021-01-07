@@ -28,7 +28,7 @@ namespace EcoVadis.AzureDevOps.App
 
         public async void MoveNotClosedElementsToNext(int targetSprint)
         {
-            List<string> moveUsStatuses = new List<string> { "Dev Active","L2 Approved" };
+            List<string> moveUsStatuses = new List<string> { "Dev Active", "L2 Approved" };
             List<string> moveTasksStatuses = new List<string> { "New", "Active", "Code Review" };
 
             var result = this.TFS.GetBacklog(BacklogAN, true);
@@ -39,26 +39,26 @@ namespace EcoVadis.AzureDevOps.App
                 Verbose($"UserStory {us.Id} - {us.Title} \t has status {us.Status}");
                 if (moveUsStatuses.Contains(us.Status))
                 {
-                    foreach (var element in us.WorkItems)
-                    {
-                        if (moveTasksStatuses.Contains(element.Status))
-                        {
-                            await this.TFS.UpdateIterationPath(element.Id, targetSprint);
-
-                            foreach (var subelement in element.WorkItems)
-                            {
-                                if (moveTasksStatuses.Contains(subelement.Status))
-                                {
-                                    await this.TFS.UpdateIterationPath(subelement.Id, targetSprint);
-                                }
-                            }
-                        }
-                    }
-
-
                     Verbose($"UserStory {us.Id} \t moved to sprint {targetSprint}");
                     await this.TFS.UpdateIterationPath(us.Id, targetSprint);
                 }
+
+                foreach (var element in us.WorkItems)
+                {
+                    if (moveTasksStatuses.Contains(element.Status))
+                    {
+                        await this.TFS.UpdateIterationPath(element.Id, targetSprint);
+                    }
+
+                    foreach (var subelement in element.WorkItems)
+                    {
+                        if (moveTasksStatuses.Contains(subelement.Status))
+                        {
+                            await this.TFS.UpdateIterationPath(subelement.Id, targetSprint);
+                        }
+                    }
+                }
+
             }
         }
 
