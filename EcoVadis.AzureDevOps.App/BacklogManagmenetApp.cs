@@ -1,4 +1,5 @@
-﻿using EcoVadis.AzureDevOps.Facade;
+﻿using EcoVadis.AzureDevOps.App.Facade;
+using EcoVadis.AzureDevOps.Facade;
 using Microsoft.TeamFoundation.TestManagement.WebApi;
 using Microsoft.VisualStudio.Services.Common;
 using System;
@@ -47,6 +48,7 @@ namespace EcoVadis.AzureDevOps.App
                 {
                     if (moveTasksStatuses.Contains(element.Status))
                     {
+                        CloneElement(element);
                         await this.TFS.UpdateIterationPath(element.Id, targetSprint);
                     }
 
@@ -143,10 +145,40 @@ namespace EcoVadis.AzureDevOps.App
             CreateTask(projectName, usId, "Progressive rollout", activity, silent);
         }
 
-        public void CreateTask(string projectName, int parentUS, string title, string activity, bool silent)
+        public void CloneElement(WorkItemElement element)
         {
-            var stealingsUS = TFS2.GetWorkItemWithRelations(parentUS);
-            foreach (var link in stealingsUS.Relations)
+
+            Dictionary<string, object> fields = new Dictionary<string, object>();
+            fields.Add("Title", element.Title);
+            fields.Add("Activity", element.Activity);
+            fields.Add("Priority", 1);
+            fields.Add("System.AssignedTo", element.AssignedTo);
+            fields.Add("System.AreaPath", element.AreaPath);
+            fields.Add("System.IterationPath", element.Iteration);
+            fields.Add("Microsoft.VSTS.Scheduling.CompletedWork", element.CompletedWork);
+            fields.Add("Microsoft.VSTS.common.BugFoundOn", element.FoundOn);
+
+            var item = TFS2.CreateWorkItem(element.Project, element.Type, fields);
+
+            TFS2.AddParentLink(item.Id.Value, element.ParentElementId);
+            fields.Clear();
+
+            if (element.Type == "eco Bug")
+            {
+                fields.Add("State", "Resolved");
+                fields.Add("Ecovadis.TargetRelease", "10.66");
+                TFS2.UpdateWorkItem(item.Id.Value, fields);
+                fields.Clear();
+            }
+            fields.Add("State", "Closed");
+            var r = TFS2.UpdateWorkItem(item.Id.Value, fields);
+            Console.WriteLine(item.Url);
+        }
+
+        public void CreateTask(string projectName, int parentUsId, string title, string activity, bool silent)
+        {
+            var parentUs = TFS2.GetWorkItemWithRelations(parentUsId);
+            foreach (var link in parentUs.Relations)
             {
                 int usid = int.Parse(link.Url.Split('/').Last());
                 var task = TFS2.GetWorkItemWithRelations(usid);
@@ -165,13 +197,13 @@ namespace EcoVadis.AzureDevOps.App
             fields.Add("Activity", activity);
             fields.Add("Priority", 1);
             // fields.Add("System.AssignedTo", username);
-            fields.Add("System.AreaPath", stealingsUS.Fields["System.AreaPath"]);
-            fields.Add("System.IterationPath", stealingsUS.Fields["System.IterationPath"]);
+            fields.Add("System.AreaPath", parentUs.Fields["System.AreaPath"]);
+            fields.Add("System.IterationPath", parentUs.Fields["System.IterationPath"]);
             //fields.Add("Microsoft.VSTS.Scheduling.CompletedWork", time);
 
             var item = TFS2.CreateWorkItem(projectName, "Eco Task", fields);
 
-            TFS2.AddParentLink(item.Id.Value, parentUS);
+            TFS2.AddParentLink(item.Id.Value, parentUsId);
 
             fields.Clear();
             Console.WriteLine(item.Url);

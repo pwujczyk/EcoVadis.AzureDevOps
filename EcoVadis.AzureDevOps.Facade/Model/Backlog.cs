@@ -18,6 +18,8 @@ namespace EcoVadis.AzureDevOps.Facade.Model
             this.UserStories = new ConcurrentBag<UserStory>();
         }
 
+
+
         public void AddUserStory(WorkItem workItem)
         {
             UserStory us = new UserStory();
@@ -40,6 +42,19 @@ namespace EcoVadis.AzureDevOps.Facade.Model
             }
         }
 
+        private object GetField(WorkItem workItem, string fieldName)
+        {
+            if (workItem.Fields.ContainsKey(fieldName))
+            {
+                return workItem.Fields[fieldName];
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
         public void AddWorkItem(WorkItem workItem)
         {
             int parentid = -1;
@@ -57,6 +72,12 @@ namespace EcoVadis.AzureDevOps.Facade.Model
             element.Iteration = workItem.Fields["System.IterationPath"].ToString();
             element.Type = workItem.Fields["System.WorkItemType"].ToString();
             element.Status = workItem.Fields["System.State"].ToString();
+            element.AreaPath = workItem.Fields["System.AreaPath"].ToString();
+            element.Project = workItem.Fields["System.TeamProject"].ToString();
+            element.AssignedTo = GetField(workItem, "System.AssignedTo");
+            element.CompletedWork = GetField(workItem, "Microsoft.VSTS.Scheduling.CompletedWork");
+            element.FoundOn = GetField(workItem, "Microsoft.VSTS.common.BugFoundOn");
+            element.ParentElementId = parentid;
 
             if (workItem.Fields.ContainsKey("Microsoft.VSTS.Scheduling.OriginalEstimate"))
             {
