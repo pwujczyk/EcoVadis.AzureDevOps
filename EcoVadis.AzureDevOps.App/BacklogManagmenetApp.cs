@@ -49,6 +49,7 @@ namespace EcoVadis.AzureDevOps.App
                     if (moveTasksStatuses.Contains(element.Status))
                     {
                         CloneElement(element);
+                        RemoveCompleted(element);
                         await this.TFS.UpdateIterationPath(element.Id, targetSprint);
                     }
 
@@ -56,6 +57,9 @@ namespace EcoVadis.AzureDevOps.App
                     {
                         if (moveTasksStatuses.Contains(subelement.Status))
                         {
+                            //subtask in second iteration
+                            //CloneElement(element);
+                            //RemoveCompleted(element);
                             await this.TFS.UpdateIterationPath(subelement.Id, targetSprint);
                         }
                     }
@@ -145,17 +149,32 @@ namespace EcoVadis.AzureDevOps.App
             CreateTask(projectName, usId, "Progressive rollout", activity, silent);
         }
 
+        private void RemoveCompleted(WorkItemElement element)
+        {
+            Dictionary<string, object> fields = new Dictionary<string, object>();
+            fields.Add("Microsoft.VSTS.Scheduling.CompletedWork", 0);
+            var r = TFS2.UpdateWorkItem(element.Id, fields);
+        }
+
         public void CloneElement(WorkItemElement element)
         {
-
             Dictionary<string, object> fields = new Dictionary<string, object>();
+
+            Action<string, object> addIfNotNull = (name, o) =>
+              {
+                  if (o != null)
+                  {
+                      fields.Add(name, o);
+                  }
+              };
+
             fields.Add("Title", element.Title);
             fields.Add("Activity", element.Activity);
             fields.Add("Priority", 1);
             fields.Add("System.AssignedTo", element.AssignedTo);
             fields.Add("System.AreaPath", element.AreaPath);
             fields.Add("System.IterationPath", element.Iteration);
-            fields.Add("Microsoft.VSTS.Scheduling.CompletedWork", element.CompletedWork);
+            addIfNotNull("Microsoft.VSTS.Scheduling.CompletedWork", element.CompletedWork);
             fields.Add("Microsoft.VSTS.common.BugFoundOn", element.FoundOn);
 
             var item = TFS2.CreateWorkItem(element.Project, element.Type, fields);
