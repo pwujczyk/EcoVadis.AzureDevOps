@@ -30,7 +30,8 @@ namespace EcoVadis.AzureDevOps.App
         public async void MoveNotClosedElementsToNext(int targetSprint)
         {
             List<string> moveUsStatuses = new List<string> { "Dev Active", "L2 Approved" };
-            List<string> moveTasksStatuses = new List<string> { "New", "Active", "Code Review" };
+            List<string> moveTasksStatuses = new List<string> { "New", "Active", "Code Review", "L2 Approved" };
+            List<string> cloneTasksStatuses = new List<string> { "Active", "Code Review" };
 
             var result = this.TFS.GetBacklog(BacklogAN, true);
             Verbose($"Found {result.UserStories.Count} in Backlog");
@@ -38,18 +39,17 @@ namespace EcoVadis.AzureDevOps.App
             {
                 // if (us.Id == 83434 || us.Id == 84332) continue;
                 Verbose($"UserStory {us.Id} - {us.Title} \t has status {us.Status}");
-                if (moveUsStatuses.Contains(us.Status))
-                {
-                    Verbose($"UserStory {us.Id} \t moved to sprint {targetSprint}");
-                    await this.TFS.UpdateIterationPath(us.Id, targetSprint);
-                }
 
                 foreach (var element in us.WorkItems)
                 {
-                    if (moveTasksStatuses.Contains(element.Status))
+                    if (cloneTasksStatuses.Contains(element.Status))
                     {
                         CloneElement(element);
                         RemoveCompleted(element);
+                    }
+
+                    if (moveTasksStatuses.Contains(element.Status))
+                    {
                         await this.TFS.UpdateIterationPath(element.Id, targetSprint);
                     }
 
@@ -65,6 +65,11 @@ namespace EcoVadis.AzureDevOps.App
                     }
                 }
 
+                if (moveUsStatuses.Contains(us.Status))
+                {
+                    Verbose($"UserStory {us.Id} \t moved to sprint {targetSprint}");
+                    await this.TFS.UpdateIterationPath(us.Id, targetSprint);
+                }
             }
         }
 
@@ -175,7 +180,7 @@ namespace EcoVadis.AzureDevOps.App
             fields.Add("System.AreaPath", element.AreaPath);
             fields.Add("System.IterationPath", element.Iteration);
             addIfNotNull("Microsoft.VSTS.Scheduling.CompletedWork", element.CompletedWork);
-            fields.Add("Microsoft.VSTS.common.BugFoundOn", element.FoundOn);
+            addIfNotNull("Microsoft.VSTS.common.BugFoundOn", "Test");
 
             var item = TFS2.CreateWorkItem(element.Project, element.Type, fields);
 
@@ -186,6 +191,13 @@ namespace EcoVadis.AzureDevOps.App
             {
                 fields.Add("State", "Resolved");
                 fields.Add("Ecovadis.TargetRelease", "10.66");
+                TFS2.UpdateWorkItem(item.Id.Value, fields);
+                fields.Clear();
+            }
+
+            if (element.Type == "Eco Task")
+            {
+                fields.Add("State", "Active");
                 TFS2.UpdateWorkItem(item.Id.Value, fields);
                 fields.Clear();
             }
