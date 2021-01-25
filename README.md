@@ -84,6 +84,21 @@ Moving all users stories which are in the status "Dev Active","L2 Approved", mov
 Move-ItemsToSprint -NotClosed -TargetSprint 68 -Verbose
 ```
 
+Statuses of US which will be moved:
+- Dev Active
+- L2 Approved
+
+Statuses of tasks and bugs which will be moved:
+- New
+- Active
+- Code Review
+- L2 Approved
+
+Statuses of the tasks and bugs which will be cloned
+- Active
+- Code Review
+
+
 ## Calculate Sprint hours
 
 ```PowerShell
