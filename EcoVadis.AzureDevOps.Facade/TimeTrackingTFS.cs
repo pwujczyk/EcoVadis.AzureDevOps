@@ -64,6 +64,18 @@ namespace EcoVadis.AzureDevOps.Facade
             return null;
         }
 
+        public void AddRelated(int source, int target)
+        {
+            WorkItem parentWi = WitClient.GetWorkItemAsync(target).Result; // get parent to retrieve its url
+
+            Dictionary<string, object> fields = new Dictionary<string, object>();
+
+            fields.Add(RelConstants.LinkKeyForDict + RelConstants.RelatedRefStr + target, // to use as unique key
+            CreateNewLinkObject(RelConstants.RelatedRefStr, parentWi.Url, "Parent " + parentWi.Id));
+
+            SubmitWorkItem(fields, source);
+        }
+
         object CreateNewLinkObject(string relName, string RelUrl, string Comment = null, bool IsLocked = false)
         {
             return new

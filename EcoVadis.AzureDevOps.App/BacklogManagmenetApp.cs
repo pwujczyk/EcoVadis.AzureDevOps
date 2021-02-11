@@ -16,6 +16,7 @@ namespace EcoVadis.AzureDevOps.App
         private BacklogManagement TFS;
         private TFS TFS2;
         private string BacklogAN = "faf2fea2-0224-4966-962c-4e8efea77609";
+        private string FTRemoval = "7056c08b-dd84-48a7-8d37-9eb22d404518";
         private Action<string> Verbose;
 
         public BacklogManagmenetApp(string tfsUrl, string pat, Action<string> verbose)
@@ -212,7 +213,7 @@ namespace EcoVadis.AzureDevOps.App
             Console.WriteLine(item.Url);
         }
 
-        public void CreateTask(string projectName, int parentUsId, string title, string activity, bool silent)
+        public void CreateTask(string projectName, int parentUsId, string title, string activity, bool silent, int? plannedWork = null)
         {
             var parentUs = TFS2.GetWorkItemWithRelations(parentUsId);
             if (parentUs.Relations != null)
@@ -239,6 +240,10 @@ namespace EcoVadis.AzureDevOps.App
             // fields.Add("System.AssignedTo", username);
             fields.Add("System.AreaPath", parentUs.Fields["System.AreaPath"]);
             fields.Add("System.IterationPath", parentUs.Fields["System.IterationPath"]);
+            if (plannedWork != null)
+            {
+                fields.Add("Microsoft.VSTS.Scheduling.OriginalEstimate", plannedWork.Value);
+            }
             //fields.Add("Microsoft.VSTS.Scheduling.CompletedWork", time);
 
             var item = TFS2.CreateWorkItem(projectName, "Eco Task", fields);
@@ -249,16 +254,35 @@ namespace EcoVadis.AzureDevOps.App
             Console.WriteLine(item.Url);
         }
 
-        public int CreateUserStory(string projectName, string sprint, string title, string activity, bool silent)
+        public void CreateFTRemoval(string ProjectName, List<string> featureToggleList)
+        {
+            List<string> ftRemovalItems = TFS.GetUsNames(this.FTRemoval);
+            string currentSprint = GetCurrentSprint();
+            foreach (var featureToggle in featureToggleList)
+            {
+                string name = $"Removal of FT {featureToggle} - Technical";
+                if (ftRemovalItems.Contains(name) == false)
+                {
+                    var technicalId = CreateUserStory(ProjectName, currentSprint, name);
+                    CreateTask(ProjectName, technicalId, "Frontend", "FE Activity", false, 1);
+                    CreateTask(ProjectName, technicalId, "Backend", "BE Activity", false, 1);
+
+                    name = $"Removal of FT {featureToggle} - Business";
+                    var businessID = CreateUserStory(ProjectName, currentSprint, name);
+
+                    TFS2.AddRelated(technicalId, businessID);
+                }
+            }
+        }
+
+        public int CreateUserStory(string projectName, string sprint, string title)
         {
             Dictionary<string, object> fields = new Dictionary<string, object>();
             fields.Add("Title", title);
-           // fields.Add("Activity", activity);
-            //fields.Add("Priority", 1);
+            fields.Add("System.Tags", "FTRemoval");
             fields.Add("System.State", "New");
             fields.Add("System.AreaPath", @"EcoVadisApp\Angry Nerds");
             fields.Add("System.IterationPath", sprint);
-            //fields.Add("Microsoft.VSTS.Scheduling.CompletedWork", time);
 
             var item = TFS2.CreateWorkItem(projectName, "User Story", fields);
             return item.Id.Value;

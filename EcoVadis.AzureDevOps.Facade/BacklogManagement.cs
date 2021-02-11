@@ -80,6 +80,19 @@ namespace EcoVadis.AzureDevOps.Facade
             throw new Exception("Missing iteration path");
         }
 
+        public List<string> GetUsNames(string queryId)
+        {
+            List<string> result = new List<string>();
+
+            var items = WitClient.QueryByIdAsync(new Guid(queryId)).Result;
+            foreach(var item in items.WorkItems)
+            {
+                var targetElement = WitClient.GetWorkItemAsync(item.Id, expand: WorkItemExpand.None).Result;
+                result.Add(targetElement.Fields["System.Title"].ToString());
+            }
+            return result;
+        }
+
         public Backlog GetBacklog(string queryId, bool withBugs)
         {
             var result = new Backlog();

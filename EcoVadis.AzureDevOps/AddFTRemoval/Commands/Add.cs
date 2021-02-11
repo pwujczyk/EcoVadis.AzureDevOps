@@ -23,12 +23,18 @@ namespace EcoVadis.AzureDevOps.AddFTRemoval.Commands
             this.Cmdlet.WriteVerbose("Hello from Add FT Removal");
             var featureFlags = new FeatureFlags();
             var flags = featureFlags.Get().Result;
-            foreach (var flag in flags)
+
+            List<string> anFlags = new List<string>();
+            foreach(var flag in flags)
             {
-                this.Cmdlet.WriteObject(flag);
-                var usID = app.CreateUserStory(ProjectName, app.GetCurrentSprint(), "pawel", "fda", true);
-                app.CreateTask(ProjectName, usID, "Frontend", "FE Activity", false);
+                if (flag.Name.StartsWith("AN") || flag.Name.StartsWith("angry_nerds"))
+                {
+                    anFlags.Add(flag.Name);
+                }
             }
+
+            app.CreateFTRemoval(ProjectName, anFlags);
+
         }
     }
 }
