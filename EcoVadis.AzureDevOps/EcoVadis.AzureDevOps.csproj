@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EcoVadis.AzureDevOps.App\EcoVadis.AzureDevOps.App.csproj" />
+    <ProjectReference Include="..\EcoVadis.AzureDevOps.Optimizely\EcoVadis.AzureDevOps.Optimizely.csproj" />
   </ItemGroup>
 
   <ItemGroup>

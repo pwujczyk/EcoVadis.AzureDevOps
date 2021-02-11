@@ -10,7 +10,7 @@ namespace EcoVadis.AzureDevOps.AddFTRemoval
 {
     [Cmdlet(VerbsCommon.Add, "FTRemoval")]
     [Description("Add user stories for all FT which exists on production")]
-    class AddFTRemovalCmdlet : CmdletBase
+    public class AddFTRemovalCmdlet : CmdletBase
     {
         public AddFTRemovalCmdlet()
         {

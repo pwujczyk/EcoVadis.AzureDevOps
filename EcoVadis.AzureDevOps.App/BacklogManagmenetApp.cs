@@ -73,6 +73,12 @@ namespace EcoVadis.AzureDevOps.App
             }
         }
 
+        public string GetCurrentSprint()
+        {
+            var result = this.TFS.GetCurrentSprint(BacklogAN);
+            return result;
+        }
+
         public async void MoveElementsToNext(int targetSprint, int fromStackRank)
         {
             var result = this.TFS.GetBacklog(BacklogAN, false);
@@ -209,17 +215,20 @@ namespace EcoVadis.AzureDevOps.App
         public void CreateTask(string projectName, int parentUsId, string title, string activity, bool silent)
         {
             var parentUs = TFS2.GetWorkItemWithRelations(parentUsId);
-            foreach (var link in parentUs.Relations)
+            if (parentUs.Relations != null)
             {
-                int usid = int.Parse(link.Url.Split('/').Last());
-                var task = TFS2.GetWorkItemWithRelations(usid);
-                if (task.Fields["System.Title"].ToString() == title && task.Fields["Microsoft.VSTS.Common.Activity"].ToString() == activity)
+                foreach (var link in parentUs.Relations)
                 {
-                    if (silent)
+                    int usid = int.Parse(link.Url.Split('/').Last());
+                    var task = TFS2.GetWorkItemWithRelations(usid);
+                    if (task.Fields["System.Title"].ToString() == title && task.Fields["Microsoft.VSTS.Common.Activity"].ToString() == activity)
                     {
-                        return;
+                        if (silent)
+                        {
+                            return;
+                        }
+                        throw new Exception($"Task with this name {title} and activity {activity} already exists");
                     }
-                    throw new Exception($"Task with this name {title} and activity {activity} already exists");
                 }
             }
 
@@ -238,6 +247,21 @@ namespace EcoVadis.AzureDevOps.App
 
             fields.Clear();
             Console.WriteLine(item.Url);
+        }
+
+        public int CreateUserStory(string projectName, string sprint, string title, string activity, bool silent)
+        {
+            Dictionary<string, object> fields = new Dictionary<string, object>();
+            fields.Add("Title", title);
+           // fields.Add("Activity", activity);
+            //fields.Add("Priority", 1);
+            fields.Add("System.State", "New");
+            fields.Add("System.AreaPath", @"EcoVadisApp\Angry Nerds");
+            fields.Add("System.IterationPath", sprint);
+            //fields.Add("Microsoft.VSTS.Scheduling.CompletedWork", time);
+
+            var item = TFS2.CreateWorkItem(projectName, "User Story", fields);
+            return item.Id.Value;
         }
     }
 }

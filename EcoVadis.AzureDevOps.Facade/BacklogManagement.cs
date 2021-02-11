@@ -60,6 +60,26 @@ namespace EcoVadis.AzureDevOps.Facade
             var x = await WitClient.UpdateWorkItemAsync(patchDocument, id);
         }
 
+        public string GetCurrentSprint(string queryId)
+        {
+            Verbose("Loading Backlog to structure");
+            var items = WitClient.QueryByIdAsync(new Guid(queryId)).Result;
+            foreach(var element in items.WorkItemRelations)
+            {
+                if (element.Source != null)
+                {
+                    var targetElement = WitClient.GetWorkItemAsync(element.Source.Id, expand: WorkItemExpand.All).Result;
+
+                    if (targetElement.Fields["System.WorkItemType"].ToString() == "User Story")
+                    {
+                        var r=targetElement.Fields["System.IterationPath"];
+                        return r.ToString();
+                    }
+                }
+            }
+            throw new Exception("Missing iteration path");
+        }
+
         public Backlog GetBacklog(string queryId, bool withBugs)
         {
             var result = new Backlog();
@@ -100,8 +120,6 @@ namespace EcoVadis.AzureDevOps.Facade
             //     AddElement(item.Target);
             //     AddElement(item.Source);
             // });
-
-
 
             return result;
         }
