@@ -30,8 +30,8 @@ namespace EcoVadis.AzureDevOps.App
 
         public async void MoveNotClosedElementsToNext(int targetSprint)
         {
-            List<string> moveUsStatuses = new List<string> { "Dev Active", "L2 Approved" };
-            List<string> moveTasksStatuses = new List<string> { "New", "Active", "Code Review", "L2 Approved" };
+            List<string> moveUsStatuses = new List<string> {"New",  "Dev Active", "L2 Approved" };
+            List<string> moveTasksStatuses = new List<string> { "New", "Active", "Code Review", "L2 Approved", "Blocked" };
             List<string> cloneTasksStatuses = new List<string> { "Active", "Code Review" };
 
             var result = this.TFS.GetBacklog(BacklogAN, true);
