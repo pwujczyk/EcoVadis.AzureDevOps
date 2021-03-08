@@ -27,8 +27,10 @@ namespace EcoVadis.AzureDevOps.AddFTRemoval.Commands
             List<string> anFlags = new List<string>();
             foreach(var flag in flags)
             {
+                
                 if (flag.Name.StartsWith("AN") || flag.Name.StartsWith("angry_nerds"))
                 {
+                    this.Cmdlet.WriteVerbose($"Processing AN Flag {flag.Name}");
                     anFlags.Add(flag.Name);
                 }
             }

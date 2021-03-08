@@ -32,10 +32,9 @@ Check if in the path c:\\Users\\pwujczyk\\Documents\\ProductivityTools.MasterCon
  you have json file
 
  ![MasterConfiguration](Images/Masterconfiguration.png)
-
-
-
-
+ 
+ 
+ 
 ## Setup AzureDevops
 
 - Install Module from [PowerShell Gallery](https://www.powershellgallery.com/packages/EcoVadis.AzureDevOps/)
@@ -44,7 +43,6 @@ Check if in the path c:\\Users\\pwujczyk\\Documents\\ProductivityTools.MasterCon
 Install-Module -Name EcoVadis.AzureDevOps	
 ```
 - Create new file in the MasterConfiguration location **EcoVadis.AzureDevOps.json**
-
 ```
 {
     "TTTFSAddress":"https://azuredevops.ecovadis.com/EcoVadisApp_TeamProjectCollection/",
@@ -52,6 +50,8 @@ Install-Module -Name EcoVadis.AzureDevOps
     "TTuserName":"Pawel Wujczyk <PRD\\pwujczyk>",
 }
 ```
+
+
 
 ![MasterConfiguration](Images/AzureConfiguration.png)
 
@@ -78,7 +78,8 @@ Move-ItemsToSprint -TargetSprint 64 -FromStackRank 99999999 -Verbose
 ## Move-ItemsToSprint - not closed
 
 
-Moving all users stories which are in the status "Dev Active","L2 Approved", move all tasks and eco Bugs which are in the status "New", "Active", "Code Review", to given sprint.
+Moving all users stories which are in the status Dev Active,L2 Approved, move all tasks and eco Bugs which are in the status New, Active, Code Review, to given sprint.
+
 
 ```PowerShell
 Move-ItemsToSprint -NotClosed -TargetSprint 68 -Verbose
@@ -133,3 +134,9 @@ Add-Testing 113937 -Silent
 ```
 
 If the task already exist cmdlet will throw exception, unless you will use -Silent switch.
+
+
+## Add-FTRemoval
+It takes all US from current sprint. It checks if already we have removal FT US and if not creates two of them:
+- technical one to remove it from code
+- business one to archive it in optimizely
