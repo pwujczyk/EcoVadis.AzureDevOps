@@ -137,6 +137,45 @@ If the task already exist cmdlet will throw exception, unless you will use -Sile
 
 
 ## Add-FTRemoval
+
+### Optimizely json structure
+```
+rollouts
+featureFlags
+audiencies
+```
+
+To check if given feature flag has audience we need to take value from featureFlags node
+```
+{
+"experimentIds": [],
+"rolloutId": "19580570502",
+"variables": [],
+"id": "19581921496",
+"key": "angry_nerds_audience_test"
+}
+```
+Find rollout using rolloutId
+```
+{
+"experiments": [
+{
+"   status": "Running",
+    "audienceConditions": [
+    "or",
+    "19320882195"
+    ],
+    "audienceIds": [
+    "19320882195"
+    ],
+    ...
+"id": "19580570502"
+},
+```
+Check if audienceIds are not empty.
+
+
+
 It takes all US from current sprint. It checks if already we have removal FT US and if not creates two of them:
 - technical one to remove it from code
 - business one to archive it in optimizely
