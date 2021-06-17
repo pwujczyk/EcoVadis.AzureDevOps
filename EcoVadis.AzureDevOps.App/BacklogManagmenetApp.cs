@@ -30,8 +30,8 @@ namespace EcoVadis.AzureDevOps.App
 
         public async void MoveNotClosedElementsToNext(int targetSprint)
         {
-            List<string> moveUsStatuses = new List<string> {"New",  "Dev Active", "L2 Approved" };
-            List<string> moveTasksStatuses = new List<string> { "New", "Active", "Code Review", "L2 Approved", "Blocked" };
+            List<string> moveUsStatuses = new List<string> { "New", "Dev Active", "L2 Approved" };
+            List<string> moveTasksStatuses = new List<string> { "New", "Active", "Code Review", "L2 Approved", "Blocked", "Draft" };
             List<string> cloneTasksStatuses = new List<string> { "Active", "Code Review" };
 
             var result = this.TFS.GetBacklog(BacklogAN, true);
@@ -43,7 +43,8 @@ namespace EcoVadis.AzureDevOps.App
 
                 foreach (var element in us.WorkItems)
                 {
-                    if (cloneTasksStatuses.Contains(element.Status))
+                    decimal completedWork = element.CompletedWork == null ? 0 : decimal.Parse(element.CompletedWork.ToString());
+                    if (cloneTasksStatuses.Contains(element.Status) && completedWork > 0)
                     {
                         CloneElement(element);
                         RemoveCompleted(element);
@@ -264,8 +265,8 @@ namespace EcoVadis.AzureDevOps.App
                 if (ftRemovalItems.Contains(name) == false)
                 {
                     var technicalId = CreateUserStory(ProjectName, currentSprint, name);
-                    CreateTask(ProjectName, technicalId, "Frontend", "FE Activity", false, 1);
-                    CreateTask(ProjectName, technicalId, "Backend", "BE Activity", false, 1);
+                    CreateTask(ProjectName, technicalId, "Frontend", "FE Development", false, 1);
+                    CreateTask(ProjectName, technicalId, "Backend", "BE Development", false, 1);
 
                     name = $"Removal of FT {featureToggle} - Business";
                     var businessID = CreateUserStory(ProjectName, currentSprint, name);
